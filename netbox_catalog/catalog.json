@@ -126,7 +126,7 @@
             "recommended": true,
             "documentation_url": "https://github.com/sieteunoseis/netbox-graylog"
         },
-        "netbox-cisco-support": {
+        "netbox-cisco-support-api": {
             "category": "Integration",
             "tags": ["cisco", "support", "eox", "serial"],
             "certification": "compatible",
