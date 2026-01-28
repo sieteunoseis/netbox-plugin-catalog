@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netbox-plugin-catalog"
+version = "0.1.0"
+description = "A NetBox plugin for browsing and installing third-party plugins"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "sieteunoseis", email = "sieteunoseis@gmail.com"}
+]
+keywords = ["netbox", "plugin", "catalog", "marketplace"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Networking",
+]
+dependencies = [
+    "requests>=2.28.0",
+    "packaging>=21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/sieteunoseis/netbox-plugin-catalog"
+Repository = "https://github.com/sieteunoseis/netbox-plugin-catalog"
+Documentation = "https://github.com/sieteunoseis/netbox-plugin-catalog/wiki"
+Issues = "https://github.com/sieteunoseis/netbox-plugin-catalog/issues"
+
+[tool.setuptools.packages.find]
+include = ["netbox_catalog*"]
+
+[tool.setuptools.package-data]
+netbox_catalog = [
+    "templates/**/*.html",
+]
+"*" = ["catalog.json"]

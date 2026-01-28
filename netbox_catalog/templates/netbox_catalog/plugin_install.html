@@ -1,0 +1,102 @@
+{% extends 'base/layout.html' %}
+
+{% block title %}Install {{ plugin.name }}{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:catalog_list' %}">Plugin Catalog</a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}">{{ plugin.name }}</a>
+</li>
+<li class="breadcrumb-item active">Install</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    <i class="mdi mdi-download"></i>
+                    {% if plugin.installed_version %}Upgrade{% else %}Install{% endif %}
+                    {{ plugin.name }}
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">
+                    <strong><i class="mdi mdi-alert-circle"></i> Installation Failed</strong>
+                    <pre class="mt-2 mb-0">{{ error }}</pre>
+                </div>
+                {% if output %}
+                <div class="alert alert-secondary">
+                    <strong>Output:</strong>
+                    <pre class="mt-2 mb-0">{{ output }}</pre>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <div class="alert alert-info">
+                    <h5><i class="mdi mdi-information"></i> Before Installing</h5>
+                    <p class="mb-2">After pip installation completes, you will need to:</p>
+                    <ol class="mb-0">
+                        <li>Add the plugin to <code>PLUGINS</code> in <code>configuration.py</code></li>
+                        <li>Run database migrations</li>
+                        <li>Collect static files</li>
+                        <li><strong>Restart NetBox</strong></li>
+                    </ol>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Package</label>
+                        <input type="text" class="form-control" value="{{ plugin.name }}" disabled>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Current Version</label>
+                        <input type="text" class="form-control" value="{{ plugin.version }}" disabled>
+                        {% if plugin.installed_version %}
+                        <div class="form-text">Currently installed: v{{ plugin.installed_version }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Version to Install</label>
+                        {{ form.version }}
+                        <div class="form-text">Leave empty to install the latest version ({{ plugin.version }}).</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Configuration Snippet</label>
+                        <pre class="bg-dark text-light p-3 rounded"><code>{{ config_snippet }}</code></pre>
+                        <div class="form-text">You will need to add this to your configuration.py</div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        {{ form.confirm }}
+                        <label class="form-check-label" for="id_confirm">
+                            {{ form.confirm.label }}
+                        </label>
+                        {% if form.confirm.errors %}
+                        <div class="text-danger">{{ form.confirm.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}"
+                           class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="mdi mdi-download"></i>
+                            {% if plugin.installed_version %}Upgrade{% else %}Install{% endif %} {{ plugin.name }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

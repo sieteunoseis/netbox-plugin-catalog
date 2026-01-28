@@ -1,0 +1,96 @@
+{% extends 'generic/object.html' %}
+{% load helpers %}
+
+{% block title %}Installation Log: {{ object.package_name }}{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:catalog_list' %}">Plugin Catalog</a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:installationlog_list' %}">Installation History</a>
+</li>
+<li class="breadcrumb-item active">{{ object.package_name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Installation Details</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th>Package</th>
+                        <td>
+                            <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=object.package_name %}">
+                                {{ object.package_name }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Version</th>
+                        <td>{{ object.version }}</td>
+                    </tr>
+                    <tr>
+                        <th>Action</th>
+                        <td>{{ object.get_action_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            {% if object.status == "success" %}
+                            <span class="badge bg-success">{{ object.get_status_display }}</span>
+                            {% elif object.status == "failed" %}
+                            <span class="badge bg-danger">{{ object.get_status_display }}</span>
+                            {% elif object.status == "in_progress" %}
+                            <span class="badge bg-info text-dark">{{ object.get_status_display }}</span>
+                            {% else %}
+                            <span class="badge text-bg-secondary">{{ object.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>User</th>
+                        <td>{{ object.user|default:"-" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Started</th>
+                        <td>{{ object.started }}</td>
+                    </tr>
+                    <tr>
+                        <th>Completed</th>
+                        <td>{{ object.completed|default:"-" }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        {% if object.output %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0">Output</h5>
+            </div>
+            <div class="card-body">
+                <pre class="mb-0">{{ object.output }}</pre>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if object.error %}
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Error</h5>
+            </div>
+            <div class="card-body">
+                <pre class="mb-0 text-danger">{{ object.error }}</pre>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
