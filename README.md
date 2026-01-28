@@ -1,10 +1,12 @@
 # NetBox Plugin Catalog
 
-[![PyPI](https://img.shields.io/pypi/v/netbox-plugin-catalog)](https://pypi.org/project/netbox-plugin-catalog/)
-[![Python](https://img.shields.io/pypi/pyversions/netbox-plugin-catalog)](https://pypi.org/project/netbox-plugin-catalog/)
-[![License](https://img.shields.io/github/license/sieteunoseis/netbox-plugin-catalog)](https://github.com/sieteunoseis/netbox-plugin-catalog/blob/main/LICENSE)
-
 A NetBox plugin that provides an in-app catalog for browsing and installing third-party NetBox plugins.
+
+![NetBox Version](https://img.shields.io/badge/NetBox-4.0+-blue)
+![Python Version](https://img.shields.io/badge/Python-3.10+-green)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![CI](https://github.com/sieteunoseis/netbox-plugin-catalog/actions/workflows/ci.yml/badge.svg)](https://github.com/sieteunoseis/netbox-plugin-catalog/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/netbox-plugin-catalog)](https://pypi.org/project/netbox-plugin-catalog/)
 
 ## Features
 
