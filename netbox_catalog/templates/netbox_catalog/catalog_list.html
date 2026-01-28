@@ -67,7 +67,7 @@
                                     </a>
                                 </strong>
                                 {% if plugin.featured %}
-                                <span class="badge bg-primary text-white">Featured</span>
+                                <span class="badge text-bg-primary">Featured</span>
                                 {% endif %}
                             </div>
                             <div class="card-body">
@@ -76,13 +76,13 @@
                                 <!-- Certification & Category -->
                                 <div class="mb-2">
                                     {% if plugin.certification == "certified" %}
-                                    <span class="badge bg-success text-white">Certified</span>
+                                    <span class="badge text-bg-success">Certified</span>
                                     {% elif plugin.certification == "compatible" %}
-                                    <span class="badge bg-info text-dark">Compatible</span>
+                                    <span class="badge text-bg-info">Compatible</span>
                                     {% elif plugin.certification == "deprecated" %}
-                                    <span class="badge bg-danger text-white">Deprecated</span>
+                                    <span class="badge text-bg-danger">Deprecated</span>
                                     {% else %}
-                                    <span class="badge bg-warning text-dark">Untested</span>
+                                    <span class="badge text-bg-warning">Untested</span>
                                     {% endif %}
                                     <span class="badge text-bg-secondary">{{ plugin.category }}</span>
                                 </div>
@@ -115,9 +115,9 @@
                                         <i class="mdi mdi-check"></i>
                                         Installed: v{{ plugin.installed_version }}
                                         {% if plugin.is_activated %}
-                                        <span class="badge bg-success text-white">Active</span>
+                                        <span class="badge text-bg-success">Active</span>
                                         {% else %}
-                                        <span class="badge bg-warning text-dark">Not Activated</span>
+                                        <span class="badge text-bg-warning">Not Activated</span>
                                         {% endif %}
                                     </div>
                                     {% if plugin.upgrade_available %}

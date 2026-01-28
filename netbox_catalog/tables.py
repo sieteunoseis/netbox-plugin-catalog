@@ -17,11 +17,11 @@ class InstallationLogTable(NetBoxTable):
     status = tables.TemplateColumn(
         template_code='''
         {% if record.status == "success" %}
-            <span class="badge bg-success text-white">{{ record.get_status_display }}</span>
+            <span class="badge text-bg-success">{{ record.get_status_display }}</span>
         {% elif record.status == "failed" %}
-            <span class="badge bg-danger text-white">{{ record.get_status_display }}</span>
+            <span class="badge text-bg-danger">{{ record.get_status_display }}</span>
         {% elif record.status == "in_progress" %}
-            <span class="badge bg-info text-dark">{{ record.get_status_display }}</span>
+            <span class="badge text-bg-info">{{ record.get_status_display }}</span>
         {% else %}
             <span class="badge text-bg-secondary">{{ record.get_status_display }}</span>
         {% endif %}

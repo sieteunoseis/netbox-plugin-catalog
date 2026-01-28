@@ -42,11 +42,11 @@
                         <th>Status</th>
                         <td>
                             {% if object.status == "success" %}
-                            <span class="badge bg-success text-white">{{ object.get_status_display }}</span>
+                            <span class="badge text-bg-success">{{ object.get_status_display }}</span>
                             {% elif object.status == "failed" %}
-                            <span class="badge bg-danger text-white">{{ object.get_status_display }}</span>
+                            <span class="badge text-bg-danger">{{ object.get_status_display }}</span>
                             {% elif object.status == "in_progress" %}
-                            <span class="badge bg-info text-dark">{{ object.get_status_display }}</span>
+                            <span class="badge text-bg-info">{{ object.get_status_display }}</span>
                             {% else %}
                             <span class="badge text-bg-secondary">{{ object.get_status_display }}</span>
                             {% endif %}

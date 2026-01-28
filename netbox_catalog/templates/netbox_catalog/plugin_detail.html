@@ -56,11 +56,11 @@
                             <td>{{ log.version }}</td>
                             <td>
                                 {% if log.status == "success" %}
-                                <span class="badge bg-success text-white">{{ log.get_status_display }}</span>
+                                <span class="badge text-bg-success">{{ log.get_status_display }}</span>
                                 {% elif log.status == "failed" %}
-                                <span class="badge bg-danger text-white">{{ log.get_status_display }}</span>
+                                <span class="badge text-bg-danger">{{ log.get_status_display }}</span>
                                 {% elif log.status == "in_progress" %}
-                                <span class="badge bg-info text-dark">{{ log.get_status_display }}</span>
+                                <span class="badge text-bg-info">{{ log.get_status_display }}</span>
                                 {% else %}
                                 <span class="badge text-bg-secondary">{{ log.get_status_display }}</span>
                                 {% endif %}
@@ -102,13 +102,13 @@
                         <th>Certification</th>
                         <td>
                             {% if plugin.certification == "certified" %}
-                            <span class="badge bg-success text-white">Certified</span>
+                            <span class="badge text-bg-success">Certified</span>
                             {% elif plugin.certification == "compatible" %}
-                            <span class="badge bg-info text-dark">Compatible</span>
+                            <span class="badge text-bg-info">Compatible</span>
                             {% elif plugin.certification == "deprecated" %}
-                            <span class="badge bg-danger text-white">Deprecated</span>
+                            <span class="badge text-bg-danger">Deprecated</span>
                             {% else %}
-                            <span class="badge bg-warning text-dark">Untested</span>
+                            <span class="badge text-bg-warning">Untested</span>
                             {% endif %}
                         </td>
                     </tr>
