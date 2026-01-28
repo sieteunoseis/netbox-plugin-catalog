@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class InstallResult:
     """Result of a pip install operation."""
+
     success: bool
     package_name: str
     version: str = ""
@@ -24,10 +25,7 @@ class PluginInstaller:
         self.timeout = timeout
 
     def install(
-        self,
-        package_name: str,
-        version: str = None,
-        upgrade: bool = False
+        self, package_name: str, version: str = None, upgrade: bool = False
     ) -> InstallResult:
         """Install a package using pip."""
         package_spec = f"{package_name}=={version}" if version else package_name
@@ -40,10 +38,7 @@ class PluginInstaller:
         try:
             logger.info(f"Running: {' '.join(cmd)}")
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout
+                cmd, capture_output=True, text=True, timeout=self.timeout
             )
 
             if result.returncode == 0:
@@ -52,29 +47,25 @@ class PluginInstaller:
                     success=True,
                     package_name=package_name,
                     version=installed_version,
-                    output=result.stdout
+                    output=result.stdout,
                 )
             else:
                 return InstallResult(
                     success=False,
                     package_name=package_name,
                     output=result.stdout,
-                    error=result.stderr
+                    error=result.stderr,
                 )
 
         except subprocess.TimeoutExpired:
             return InstallResult(
                 success=False,
                 package_name=package_name,
-                error=f"Installation timed out after {self.timeout} seconds"
+                error=f"Installation timed out after {self.timeout} seconds",
             )
         except Exception as e:
             logger.exception(f"Error installing {package_name}")
-            return InstallResult(
-                success=False,
-                package_name=package_name,
-                error=str(e)
-            )
+            return InstallResult(success=False, package_name=package_name, error=str(e))
 
     def uninstall(self, package_name: str) -> InstallResult:
         """Uninstall a package using pip."""
@@ -82,27 +73,18 @@ class PluginInstaller:
 
         try:
             logger.info(f"Running: {' '.join(cmd)}")
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
 
             return InstallResult(
                 success=result.returncode == 0,
                 package_name=package_name,
                 output=result.stdout,
-                error=result.stderr if result.returncode != 0 else ""
+                error=result.stderr if result.returncode != 0 else "",
             )
 
         except Exception as e:
             logger.exception(f"Error uninstalling {package_name}")
-            return InstallResult(
-                success=False,
-                package_name=package_name,
-                error=str(e)
-            )
+            return InstallResult(success=False, package_name=package_name, error=str(e))
 
     def _get_installed_version(self, package_name: str) -> str:
         """Get the installed version of a package."""
@@ -111,7 +93,7 @@ class PluginInstaller:
                 [sys.executable, "-m", "pip", "show", package_name],
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
             )
             if result.returncode == 0:
                 for line in result.stdout.split("\n"):
@@ -128,7 +110,7 @@ class PluginInstaller:
     def generate_config_snippet(self, package_name: str) -> str:
         """Generate the configuration.py snippet for a plugin."""
         module_name = package_name.replace("-", "_")
-        return f'''\
+        return f"""\
 # Add to PLUGINS list in configuration.py:
 PLUGINS = [
     # ... existing plugins ...
@@ -142,7 +124,7 @@ PLUGINS_CONFIG = {{
         # Plugin-specific settings here
     }},
 }}
-'''
+"""
 
     def generate_post_install_commands(self) -> dict:
         """Generate post-installation commands."""

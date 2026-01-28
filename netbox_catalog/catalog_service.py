@@ -8,8 +8,8 @@ import requests
 from django.conf import settings
 from django.core.cache import cache
 
-from .pypi_client import PyPIClient
 from .compatibility import CompatibilityChecker
+from .pypi_client import PyPIClient
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PluginInfo:
     """Combined plugin information from PyPI and curated catalog."""
+
     name: str
     version: str
     summary: str = ""
@@ -72,8 +73,8 @@ class CatalogService:
     def _load_curated_catalog(self) -> dict:
         """Load curated catalog from file or URL."""
         # Try remote URL first
-        config = getattr(settings, 'PLUGINS_CONFIG', {}).get('netbox_catalog', {})
-        remote_url = config.get('catalog_json_url')
+        config = getattr(settings, "PLUGINS_CONFIG", {}).get("netbox_catalog", {})
+        remote_url = config.get("catalog_json_url")
 
         if remote_url:
             try:
@@ -170,7 +171,9 @@ class CatalogService:
 
         return plugin
 
-    def _merge_plugin_info(self, name: str, pypi_info: dict, curated_info: dict) -> PluginInfo:
+    def _merge_plugin_info(
+        self, name: str, pypi_info: dict, curated_info: dict
+    ) -> PluginInfo:
         """Merge PyPI and curated data into PluginInfo."""
         keywords = pypi_info.get("keywords") or ""
         if isinstance(keywords, str):
@@ -189,7 +192,6 @@ class CatalogService:
             requires_python=pypi_info.get("requires_python", ""),
             requires_dist=pypi_info.get("requires_dist") or [],
             releases=pypi_info.get("releases", []),
-
             # Curated overrides
             category=curated_info.get("category", "Other"),
             tags=curated_info.get("tags", []),
@@ -217,11 +219,12 @@ class CatalogService:
         try:
             import subprocess
             import sys
+
             result = subprocess.run(
                 [sys.executable, "-m", "pip", "list", "--format=json"],
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
             if result.returncode == 0:
                 packages = json.loads(result.stdout)
@@ -237,7 +240,7 @@ class CatalogService:
 
     def _get_activated_plugins(self) -> list[str]:
         """Get list of activated plugin module names."""
-        return list(getattr(settings, 'PLUGINS', []))
+        return list(getattr(settings, "PLUGINS", []))
 
     def get_categories(self) -> list[str]:
         """Get list of available categories."""

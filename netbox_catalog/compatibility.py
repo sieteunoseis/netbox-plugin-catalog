@@ -1,11 +1,10 @@
 import importlib
-import re
 import logging
+import re
 from typing import Optional
 
-from packaging.version import Version, InvalidVersion
-
 from django.conf import settings
+from packaging.version import InvalidVersion, Version
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,7 @@ def parse_netbox_version(version_string: str) -> Version:
         pass
 
     # Extract version number from string like '4.5.1-Docker-3.4.2'
-    match = re.match(r'^(\d+\.\d+\.\d+)', version_string)
+    match = re.match(r"^(\d+\.\d+\.\d+)", version_string)
     if match:
         try:
             return Version(match.group(1))
@@ -58,24 +57,26 @@ class CompatibilityChecker:
             module = importlib.import_module(module_name)
 
             # Get the PluginConfig class (conventionally named 'config')
-            config_class = getattr(module, 'config', None)
+            config_class = getattr(module, "config", None)
 
             if config_class is None:
                 # Try to find it in the module
                 for attr_name in dir(module):
                     attr = getattr(module, attr_name)
-                    if (isinstance(attr, type) and
-                        hasattr(attr, 'min_version') and
-                        hasattr(attr, 'name')):
+                    if (
+                        isinstance(attr, type)
+                        and hasattr(attr, "min_version")
+                        and hasattr(attr, "name")
+                    ):
                         config_class = attr
                         break
 
             if config_class:
                 return {
-                    "min_version": getattr(config_class, 'min_version', None),
-                    "max_version": getattr(config_class, 'max_version', None),
-                    "name": getattr(config_class, 'name', module_name),
-                    "version": getattr(config_class, 'version', None),
+                    "min_version": getattr(config_class, "min_version", None),
+                    "max_version": getattr(config_class, "max_version", None),
+                    "name": getattr(config_class, "name", module_name),
+                    "version": getattr(config_class, "version", None),
                 }
         except ImportError:
             # Plugin not installed or import failed
@@ -86,10 +87,7 @@ class CompatibilityChecker:
         return {}
 
     def check_compatibility(
-        self,
-        package_name: str,
-        min_version: str = None,
-        max_version: str = None
+        self, package_name: str, min_version: str = None, max_version: str = None
     ) -> dict:
         """
         Check if a plugin is compatible with current NetBox version.
@@ -129,9 +127,7 @@ class CompatibilityChecker:
         return result
 
     def get_full_compatibility_info(
-        self,
-        package_name: str,
-        curated_data: dict = None
+        self, package_name: str, curated_data: dict = None
     ) -> dict:
         """
         Get full compatibility info from all sources.
@@ -162,9 +158,7 @@ class CompatibilityChecker:
                     source = "plugin_config"
 
         # Check compatibility
-        compat_result = self.check_compatibility(
-            package_name, min_version, max_version
-        )
+        compat_result = self.check_compatibility(package_name, min_version, max_version)
         compat_result["source"] = source
 
         return compat_result
@@ -181,7 +175,7 @@ class CompatibilityChecker:
             compat = self.check_compatibility(
                 package_name,
                 constraints.get("min_version"),
-                constraints.get("max_version")
+                constraints.get("max_version"),
             )
 
             if not compat["compatible"]:
@@ -213,13 +207,13 @@ def parse_netbox_version_from_readme(description: str) -> Optional[str]:
 
     patterns = [
         # "NetBox 4.x" or "NetBox 4.5.x"
-        r'NetBox\s+(\d+\.\d+)(?:\.x)?',
+        r"NetBox\s+(\d+\.\d+)(?:\.x)?",
         # "NetBox >= 4.0" or "NetBox >=4.0"
-        r'NetBox\s*>=?\s*(\d+\.\d+)',
+        r"NetBox\s*>=?\s*(\d+\.\d+)",
         # "requires NetBox 4.0" (case insensitive)
-        r'[Rr]equires\s+NetBox\s+(\d+\.\d+)',
+        r"[Rr]equires\s+NetBox\s+(\d+\.\d+)",
         # Version table: "| 4.5.x | 1.0.0 |"
-        r'\|\s*(\d+\.\d+)\.x\s*\|',
+        r"\|\s*(\d+\.\d+)\.x\s*\|",
     ]
 
     for pattern in patterns:

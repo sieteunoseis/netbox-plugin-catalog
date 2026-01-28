@@ -1,17 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import View
-
 from netbox.views import generic
 
 from .catalog_service import CatalogService
+from .filtersets import InstallationLogFilterSet
+from .forms import InstallationLogFilterForm, InstallForm, PluginFilterForm
 from .installer import PluginInstaller
 from .models import InstallationLog
 from .tables import InstallationLogTable
-from .filtersets import InstallationLogFilterSet
-from .forms import PluginFilterForm, InstallForm, InstallationLogFilterForm
 
 
 class CatalogListView(PermissionRequiredMixin, View):
@@ -61,7 +60,8 @@ class CatalogListView(PermissionRequiredMixin, View):
         if search:
             search_lower = search.lower()
             plugins = [
-                p for p in plugins
+                p
+                for p in plugins
                 if search_lower in (p.name or "").lower()
                 or search_lower in (p.summary or "").lower()
                 or search_lower in (p.author or "").lower()
@@ -73,13 +73,17 @@ class CatalogListView(PermissionRequiredMixin, View):
         categories = service.get_categories()
         filter_form = PluginFilterForm(request.GET, categories=categories)
 
-        return render(request, self.template_name, {
-            "plugins": plugins,
-            "categories": categories,
-            "certification_levels": service.get_certification_levels(),
-            "filter_form": filter_form,
-            "total_count": len(plugins),
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "plugins": plugins,
+                "categories": categories,
+                "certification_levels": service.get_certification_levels(),
+                "filter_form": filter_form,
+                "total_count": len(plugins),
+            },
+        )
 
 
 class PluginDetailView(PermissionRequiredMixin, View):
@@ -97,16 +101,20 @@ class PluginDetailView(PermissionRequiredMixin, View):
             return redirect("plugins:netbox_catalog:catalog_list")
 
         # Get installation history for this plugin
-        install_logs = InstallationLog.objects.filter(
-            package_name=name
-        ).order_by("-started")[:10]
+        install_logs = InstallationLog.objects.filter(package_name=name).order_by(
+            "-started"
+        )[:10]
 
-        return render(request, self.template_name, {
-            "plugin": plugin,
-            "object": plugin,  # For breadcrumbs
-            "install_logs": install_logs,
-            "certification_levels": service.get_certification_levels(),
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "plugin": plugin,
+                "object": plugin,  # For breadcrumbs
+                "install_logs": install_logs,
+                "certification_levels": service.get_certification_levels(),
+            },
+        )
 
 
 class PluginInstallView(PermissionRequiredMixin, View):
@@ -125,12 +133,16 @@ class PluginInstallView(PermissionRequiredMixin, View):
 
         installer = PluginInstaller()
 
-        return render(request, self.template_name, {
-            "plugin": plugin,
-            "object": plugin,
-            "form": InstallForm(initial={"version": plugin.version}),
-            "config_snippet": installer.generate_config_snippet(name),
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "plugin": plugin,
+                "object": plugin,
+                "form": InstallForm(initial={"version": plugin.version}),
+                "config_snippet": installer.generate_config_snippet(name),
+            },
+        )
 
     def post(self, request, name):
         service = CatalogService()
@@ -144,12 +156,16 @@ class PluginInstallView(PermissionRequiredMixin, View):
         installer = PluginInstaller()
 
         if not form.is_valid():
-            return render(request, self.template_name, {
-                "plugin": plugin,
-                "object": plugin,
-                "form": form,
-                "config_snippet": installer.generate_config_snippet(name),
-            })
+            return render(
+                request,
+                self.template_name,
+                {
+                    "plugin": plugin,
+                    "object": plugin,
+                    "form": form,
+                    "config_snippet": installer.generate_config_snippet(name),
+                },
+            )
 
         version = form.cleaned_data.get("version") or None
         upgrade = bool(plugin.installed_version)
@@ -158,7 +174,11 @@ class PluginInstallView(PermissionRequiredMixin, View):
         log = InstallationLog.objects.create(
             package_name=name,
             version=version or plugin.version,
-            action=InstallationLog.Action.UPGRADE if upgrade else InstallationLog.Action.INSTALL,
+            action=(
+                InstallationLog.Action.UPGRADE
+                if upgrade
+                else InstallationLog.Action.INSTALL
+            ),
             status=InstallationLog.Status.IN_PROGRESS,
             user=request.user,
         )
@@ -167,7 +187,11 @@ class PluginInstallView(PermissionRequiredMixin, View):
         result = installer.install(name, version=version, upgrade=upgrade)
 
         # Update log
-        log.status = InstallationLog.Status.SUCCESS if result.success else InstallationLog.Status.FAILED
+        log.status = (
+            InstallationLog.Status.SUCCESS
+            if result.success
+            else InstallationLog.Status.FAILED
+        )
         log.output = result.output
         log.error = result.error
         log.version = result.version or version or plugin.version
@@ -179,14 +203,18 @@ class PluginInstallView(PermissionRequiredMixin, View):
             return redirect("plugins:netbox_catalog:plugin_installed", name=name)
         else:
             messages.error(request, f"Failed to install {name}: {result.error}")
-            return render(request, self.template_name, {
-                "plugin": plugin,
-                "object": plugin,
-                "form": form,
-                "error": result.error,
-                "output": result.output,
-                "config_snippet": installer.generate_config_snippet(name),
-            })
+            return render(
+                request,
+                self.template_name,
+                {
+                    "plugin": plugin,
+                    "object": plugin,
+                    "form": form,
+                    "error": result.error,
+                    "output": result.output,
+                    "config_snippet": installer.generate_config_snippet(name),
+                },
+            )
 
 
 class PluginInstalledView(PermissionRequiredMixin, View):
@@ -202,12 +230,16 @@ class PluginInstalledView(PermissionRequiredMixin, View):
 
         commands = installer.generate_post_install_commands()
 
-        return render(request, self.template_name, {
-            "plugin": plugin,
-            "object": plugin,
-            "config_snippet": installer.generate_config_snippet(name),
-            "commands": commands,
-        })
+        return render(
+            request,
+            self.template_name,
+            {
+                "plugin": plugin,
+                "object": plugin,
+                "config_snippet": installer.generate_config_snippet(name),
+                "commands": commands,
+            },
+        )
 
 
 class InstallationLogListView(generic.ObjectListView):

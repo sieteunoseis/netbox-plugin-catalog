@@ -2,8 +2,8 @@ import logging
 from typing import Optional
 
 import requests
-from django.core.cache import cache
 from django.conf import settings
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +16,21 @@ class PyPIClient:
     NETBOX_PREFIXES = ["netbox-", "netbox_"]
 
     def __init__(self, base_url: str = None, timeout: int = 30):
-        plugin_config = getattr(settings, 'PLUGINS_CONFIG', {}).get('netbox_catalog', {})
-        self.base_url = (base_url or plugin_config.get('pypi_index_url', 'https://pypi.org')).rstrip("/")
+        plugin_config = getattr(settings, "PLUGINS_CONFIG", {}).get(
+            "netbox_catalog", {}
+        )
+        self.base_url = (
+            base_url or plugin_config.get("pypi_index_url", "https://pypi.org")
+        ).rstrip("/")
         self.timeout = timeout
-        self.cache_timeout = plugin_config.get('pypi_cache_timeout', 3600)
+        self.cache_timeout = plugin_config.get("pypi_cache_timeout", 3600)
         self.session = requests.Session()
-        self.session.headers.update({
-            "Accept": "application/vnd.pypi.simple.v1+json",
-            "User-Agent": "netbox-catalog/0.1.0"
-        })
+        self.session.headers.update(
+            {
+                "Accept": "application/vnd.pypi.simple.v1+json",
+                "User-Agent": "netbox-catalog/0.1.0",
+            }
+        )
 
     def get_all_netbox_packages(self) -> list[str]:
         """Fetch all package names that start with netbox- prefix."""
@@ -35,16 +41,19 @@ class PyPIClient:
 
         try:
             response = self.session.get(
-                f"{self.base_url}{self.SIMPLE_API}",
-                timeout=self.timeout
+                f"{self.base_url}{self.SIMPLE_API}", timeout=self.timeout
             )
             response.raise_for_status()
             data = response.json()
 
             # Filter for netbox-* packages
             packages = [
-                p["name"] for p in data.get("projects", [])
-                if any(p["name"].lower().startswith(prefix) for prefix in self.NETBOX_PREFIXES)
+                p["name"]
+                for p in data.get("projects", [])
+                if any(
+                    p["name"].lower().startswith(prefix)
+                    for prefix in self.NETBOX_PREFIXES
+                )
             ]
 
             cache.set(cache_key, packages, self.cache_timeout)
@@ -63,7 +72,10 @@ class PyPIClient:
 
         try:
             # Need different Accept header for JSON API
-            headers = {"Accept": "application/json", "User-Agent": "netbox-catalog/0.1.0"}
+            headers = {
+                "Accept": "application/json",
+                "User-Agent": "netbox-catalog/0.1.0",
+            }
             url = f"{self.base_url}{self.JSON_API.format(package=package_name)}"
             response = requests.get(url, headers=headers, timeout=self.timeout)
             response.raise_for_status()
@@ -77,7 +89,8 @@ class PyPIClient:
                 "summary": info.get("summary"),
                 "description": info.get("description"),
                 "description_content_type": info.get("description_content_type"),
-                "author": info.get("author") or self._extract_author_from_email(info.get("author_email")),
+                "author": info.get("author")
+                or self._extract_author_from_email(info.get("author_email")),
                 "author_email": info.get("author_email"),
                 "license": info.get("license"),
                 "keywords": info.get("keywords"),
@@ -85,7 +98,8 @@ class PyPIClient:
                 "requires_python": info.get("requires_python"),
                 "requires_dist": info.get("requires_dist", []),
                 "project_urls": info.get("project_urls", {}),
-                "home_page": info.get("home_page") or (info.get("project_urls") or {}).get("Homepage"),
+                "home_page": info.get("home_page")
+                or (info.get("project_urls") or {}).get("Homepage"),
                 "releases": list(data.get("releases", {}).keys()),
             }
 

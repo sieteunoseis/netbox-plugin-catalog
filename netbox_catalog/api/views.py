@@ -1,7 +1,7 @@
 from netbox.api.viewsets import NetBoxModelViewSet
 
-from ..models import InstallationLog
 from ..filtersets import InstallationLogFilterSet
+from ..models import InstallationLog
 from .serializers import InstallationLogSerializer
 
 
