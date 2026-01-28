@@ -62,9 +62,9 @@ class CatalogListView(PermissionRequiredMixin, View):
             search_lower = search.lower()
             plugins = [
                 p for p in plugins
-                if search_lower in p.name.lower()
-                or search_lower in p.summary.lower()
-                or search_lower in p.author.lower()
+                if search_lower in (p.name or "").lower()
+                or search_lower in (p.summary or "").lower()
+                or search_lower in (p.author or "").lower()
             ]
 
         # Sort: featured first, then by name
