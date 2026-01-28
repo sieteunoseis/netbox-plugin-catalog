@@ -1,0 +1,161 @@
+{% extends 'base/layout.html' %}
+{% load helpers %}
+
+{% block title %}Plugin Catalog{% endblock %}
+
+{% block tabs %}
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'plugins:netbox_catalog:catalog_list' %}">Browse</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'plugins:netbox_catalog:installationlog_list' %}">History</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="mdi mdi-puzzle"></i> Plugin Catalog
+                </h5>
+                <div>
+                    <span class="text-muted me-3">{{ total_count }} plugins</span>
+                    <form method="post" action="{% url 'plugins:netbox_catalog:refresh_cache' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                            <i class="mdi mdi-refresh"></i> Refresh
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Filters -->
+                <form method="get" class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        {{ filter_form.q }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.category }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.certification }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.status }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ filter_form.compatibility }}
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </form>
+
+                <!-- Plugin Grid -->
+                <div class="row">
+                    {% for plugin in plugins %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 {% if plugin.featured %}border-primary{% endif %}">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong>
+                                    <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}">
+                                        {{ plugin.name }}
+                                    </a>
+                                </strong>
+                                {% if plugin.featured %}
+                                <span class="badge bg-primary">Featured</span>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text small">{{ plugin.summary|truncatewords:20 }}</p>
+
+                                <!-- Certification & Category -->
+                                <div class="mb-2">
+                                    {% if plugin.certification == "certified" %}
+                                    <span class="badge bg-success">Certified</span>
+                                    {% elif plugin.certification == "compatible" %}
+                                    <span class="badge bg-info text-dark">Compatible</span>
+                                    {% elif plugin.certification == "deprecated" %}
+                                    <span class="badge bg-danger">Deprecated</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Untested</span>
+                                    {% endif %}
+                                    <span class="badge text-bg-secondary">{{ plugin.category }}</span>
+                                </div>
+
+                                <!-- Compatibility -->
+                                <div class="mb-2">
+                                    {% if plugin.is_compatible %}
+                                        {% if plugin.compatibility_source == "unknown" %}
+                                        <span class="text-warning small">
+                                            <i class="mdi mdi-help-circle"></i> Compatibility unknown
+                                        </span>
+                                        {% else %}
+                                        <span class="text-success small">
+                                            <i class="mdi mdi-check-circle"></i> Compatible
+                                        </span>
+                                        {% endif %}
+                                    {% else %}
+                                    <span class="text-danger small">
+                                        <i class="mdi mdi-close-circle"></i> {{ plugin.compatibility_reason }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Version & Author -->
+                                <div class="small text-muted">
+                                    <div>v{{ plugin.version }} by {{ plugin.author|default:"Unknown" }}</div>
+
+                                    {% if plugin.installed_version %}
+                                    <div class="text-success">
+                                        <i class="mdi mdi-check"></i>
+                                        Installed: v{{ plugin.installed_version }}
+                                        {% if plugin.is_activated %}
+                                        <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                        <span class="badge bg-warning text-dark">Not Activated</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if plugin.upgrade_available %}
+                                    <div class="text-info">
+                                        <i class="mdi mdi-arrow-up"></i> Upgrade available
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}"
+                                   class="btn btn-sm btn-outline-primary">Details</a>
+                                {% if plugin.is_compatible %}
+                                    {% if not plugin.installed_version %}
+                                    <a href="{% url 'plugins:netbox_catalog:plugin_install' name=plugin.name %}"
+                                       class="btn btn-sm btn-success">Install</a>
+                                    {% elif plugin.upgrade_available %}
+                                    <a href="{% url 'plugins:netbox_catalog:plugin_install' name=plugin.name %}"
+                                       class="btn btn-sm btn-info">Upgrade</a>
+                                    {% endif %}
+                                {% else %}
+                                <button class="btn btn-sm btn-secondary" disabled>Incompatible</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <i class="mdi mdi-information"></i>
+                            No plugins found matching your criteria.
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base/layout.html' %}
+
+{% block title %}{{ plugin.name }} Installed{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:catalog_list' %}">Plugin Catalog</a>
+</li>
+<li class="breadcrumb-item">
+    <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}">{{ plugin.name }}</a>
+</li>
+<li class="breadcrumb-item active">Installed</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="mdi mdi-check-circle"></i>
+                    Successfully Installed {{ plugin.name }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h5><i class="mdi mdi-alert"></i> Action Required</h5>
+                    <p class="mb-0">The package has been installed via pip, but you need to complete the following steps to activate it.</p>
+                </div>
+
+                <h5>Step 1: Edit configuration.py</h5>
+                <p>Add the following to your NetBox configuration file:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code>{{ config_snippet }}</code></pre>
+
+                <h5>Step 2: Run Migrations</h5>
+                <p>Execute the following command to apply any database changes:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code>{{ commands.migrate }}</code></pre>
+
+                <h5>Step 3: Collect Static Files</h5>
+                <p>Execute the following command to collect plugin static assets:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code>{{ commands.collectstatic }}</code></pre>
+
+                <h5>Step 4: Restart NetBox</h5>
+                <p>Restart your NetBox service/container to load the plugin:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code># Docker Compose
+{{ commands.restart_docker }}
+
+# Systemd
+{{ commands.restart_systemd }}</code></pre>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="{% url 'plugins:netbox_catalog:catalog_list' %}" class="btn btn-outline-secondary">
+                        <i class="mdi mdi-arrow-left"></i> Back to Catalog
+                    </a>
+                    <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}" class="btn btn-primary">
+                        View Plugin Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

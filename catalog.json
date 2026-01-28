@@ -1,0 +1,183 @@
+{
+    "version": "1.0.0",
+    "last_updated": "2026-01-28",
+    "plugins": {
+        "netbox-bgp": {
+            "category": "Network Management",
+            "tags": ["routing", "bgp", "networking"],
+            "certification": "certified",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "BGP session and routing management for NetBox",
+            "recommended": true,
+            "featured": true,
+            "documentation_url": "https://github.com/netbox-community/netbox-bgp"
+        },
+        "netbox-acls": {
+            "category": "Security",
+            "tags": ["acl", "firewall", "access-lists", "security"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Access Control List management",
+            "recommended": true,
+            "featured": true,
+            "documentation_url": "https://github.com/netbox-community/netbox-acls"
+        },
+        "netbox-plugin-dns": {
+            "category": "Network Management",
+            "tags": ["dns", "zones", "records"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "DNS zones and records management",
+            "recommended": true,
+            "featured": true,
+            "documentation_url": "https://github.com/peteeckel/netbox-plugin-dns"
+        },
+        "netbox-napalm-plugin": {
+            "category": "Automation",
+            "tags": ["napalm", "network-automation", "device-management"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "NAPALM integration for device configuration and data collection",
+            "recommended": true,
+            "documentation_url": "https://github.com/netbox-community/netbox-napalm-plugin"
+        },
+        "netbox-lifecycle": {
+            "category": "Infrastructure",
+            "tags": ["lifecycle", "eol", "eos", "hardware", "contracts"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Hardware EOS/EOL, License and Support Contract tracking",
+            "recommended": true,
+            "documentation_url": "https://github.com/DanSheps/netbox-lifecycle"
+        },
+        "netbox-inventory": {
+            "category": "Infrastructure",
+            "tags": ["inventory", "hardware", "assets", "tracking"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Hardware inventory tracking - installed or in storage",
+            "recommended": true,
+            "documentation_url": "https://github.com/ArnesSI/netbox-inventory"
+        },
+        "netbox-data-flows": {
+            "category": "Documentation",
+            "tags": ["data-flows", "applications", "systems"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Document data flows between systems and applications",
+            "recommended": true,
+            "documentation_url": "https://github.com/Alef-Burzmali/netbox-data-flows"
+        },
+        "netbox-docker-plugin": {
+            "category": "Infrastructure",
+            "tags": ["docker", "containers", "agents"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Docker container management integration",
+            "recommended": true,
+            "documentation_url": "https://github.com/SaaShup/netbox-docker-plugin"
+        },
+        "netbox-lists": {
+            "category": "Integration",
+            "tags": ["lists", "prometheus", "exports"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "IP list exports and Prometheus integration",
+            "recommended": true,
+            "documentation_url": "https://github.com/netbox-community/netbox-lists"
+        },
+        "netbox-librenms-plugin": {
+            "category": "Monitoring",
+            "tags": ["librenms", "monitoring", "integration"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "LibreNMS monitoring integration",
+            "recommended": true,
+            "documentation_url": "https://github.com/bonzo81/netbox-librenms-plugin"
+        },
+        "nextbox-ui-plugin": {
+            "category": "Visualization",
+            "tags": ["topology", "visualization", "ui", "diagrams"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Next-Gen Topology Visualization powered by topoSphere SDK",
+            "recommended": true,
+            "featured": true,
+            "documentation_url": "https://github.com/iDebugAll/nextbox-ui-plugin"
+        },
+        "netbox-graylog": {
+            "category": "Integration",
+            "tags": ["graylog", "logs", "syslog"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Graylog log management integration",
+            "recommended": true,
+            "documentation_url": "https://github.com/sieteunoseis/netbox-graylog"
+        },
+        "netbox-cisco-support": {
+            "category": "Integration",
+            "tags": ["cisco", "support", "eox", "serial"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Cisco Support API integration for EOX data",
+            "recommended": true,
+            "documentation_url": "https://github.com/sieteunoseis/netbox-cisco-support"
+        },
+        "netbox-catalyst-center": {
+            "category": "Integration",
+            "tags": ["cisco", "catalyst-center", "dnac", "sda"],
+            "certification": "compatible",
+            "netbox_min_version": "4.0.0",
+            "netbox_max_version": null,
+            "notes": "Cisco Catalyst Center (DNA Center) integration",
+            "recommended": true,
+            "documentation_url": "https://github.com/sieteunoseis/netbox-catalyst-center"
+        }
+    },
+    "categories": [
+        "Network Management",
+        "Security",
+        "Automation",
+        "Infrastructure",
+        "Monitoring",
+        "Visualization",
+        "Documentation",
+        "Integration",
+        "Other"
+    ],
+    "certification_levels": {
+        "certified": {
+            "label": "Certified",
+            "description": "Certified by NetBox Labs, guaranteed compatibility",
+            "color": "success"
+        },
+        "compatible": {
+            "label": "Compatible",
+            "description": "Community validated, works with current NetBox",
+            "color": "info"
+        },
+        "untested": {
+            "label": "Untested",
+            "description": "Not tested with current NetBox version",
+            "color": "warning"
+        },
+        "deprecated": {
+            "label": "Deprecated",
+            "description": "No longer maintained or recommended",
+            "color": "danger"
+        }
+    }
+}
