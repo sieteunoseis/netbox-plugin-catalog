@@ -41,5 +41,5 @@ include = ["netbox_catalog*"]
 [tool.setuptools.package-data]
 netbox_catalog = [
     "templates/**/*.html",
+    "catalog.json",
 ]
-"*" = ["catalog.json"]

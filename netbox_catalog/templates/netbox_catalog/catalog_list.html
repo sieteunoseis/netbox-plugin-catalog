@@ -67,7 +67,7 @@
                                     </a>
                                 </strong>
                                 {% if plugin.featured %}
-                                <span class="badge bg-primary">Featured</span>
+                                <span class="badge bg-primary text-white">Featured</span>
                                 {% endif %}
                             </div>
                             <div class="card-body">
@@ -76,11 +76,11 @@
                                 <!-- Certification & Category -->
                                 <div class="mb-2">
                                     {% if plugin.certification == "certified" %}
-                                    <span class="badge bg-success">Certified</span>
+                                    <span class="badge bg-success text-white">Certified</span>
                                     {% elif plugin.certification == "compatible" %}
                                     <span class="badge bg-info text-dark">Compatible</span>
                                     {% elif plugin.certification == "deprecated" %}
-                                    <span class="badge bg-danger">Deprecated</span>
+                                    <span class="badge bg-danger text-white">Deprecated</span>
                                     {% else %}
                                     <span class="badge bg-warning text-dark">Untested</span>
                                     {% endif %}
@@ -115,7 +115,7 @@
                                         <i class="mdi mdi-check"></i>
                                         Installed: v{{ plugin.installed_version }}
                                         {% if plugin.is_activated %}
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success text-white">Active</span>
                                         {% else %}
                                         <span class="badge bg-warning text-dark">Not Activated</span>
                                         {% endif %}

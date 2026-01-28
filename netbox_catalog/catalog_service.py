@@ -84,7 +84,7 @@ class CatalogService:
                 logger.warning(f"Failed to fetch remote catalog: {e}")
 
         # Fall back to local file
-        catalog_path = Path(__file__).parent.parent / "catalog.json"
+        catalog_path = Path(__file__).parent / "catalog.json"
         if catalog_path.exists():
             try:
                 with open(catalog_path) as f:
