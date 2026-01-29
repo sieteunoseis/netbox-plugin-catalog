@@ -141,10 +141,53 @@ PLUGINS_CONFIG = {
 }
 ```
 
+## Docker Installation
+
+For Docker deployments, the plugin can automatically add packages to `requirements-extra.txt` instead of using pip directly. This allows installations to persist across container restarts.
+
+### Setup
+
+1. **Mount requirements-extra.txt as read-write** in your `docker-compose.yml`:
+
+```yaml
+services:
+  netbox:
+    volumes:
+      - ./requirements-extra.txt:/opt/netbox/requirements-extra.txt:rw
+```
+
+2. **Set file permissions** so the NetBox process can write to it:
+
+```bash
+# The NetBox container runs the web process as 'unit' user (UID 999)
+# The file needs to be writable by this user
+chmod 666 ./requirements-extra.txt
+```
+
+3. **Restart the container** to apply the volume mount changes.
+
+### How It Works
+
+When properly configured:
+1. Click **Add to Requirements** on a plugin's install page
+2. The package spec is appended to `requirements-extra.txt`
+3. Edit `configuration/plugins.py` to add the plugin to `PLUGINS`
+4. Restart the container: `docker-compose down && docker-compose up -d`
+5. The container startup script installs packages from `requirements-extra.txt`
+
+### Troubleshooting
+
+If you see **"Manual Installation Required"** instead of the install button:
+
+- Verify `requirements-extra.txt` is mounted with `:rw` (not `:ro`)
+- Check file permissions: `ls -la requirements-extra.txt`
+- Ensure the file exists (create an empty one if needed)
+
 ## Security Considerations
 
 - **Permissions**: Only users with `netbox_catalog.add_installationlog` permission can install plugins
 - **pip install**: Runs in the same Python environment as NetBox
+- **Docker**: Writes to requirements-extra.txt, which is installed on container restart
 - **Network access**: Requires outbound HTTPS to pypi.org
 
 ## Contributing
