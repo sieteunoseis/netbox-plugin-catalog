@@ -180,7 +180,7 @@ class PluginInstaller:
                     output=f"Updated package in requirements: {package_spec}",
                 )
             except Exception as e:
-                logger.exception(f"Error updating requirements file")
+                logger.exception("Error updating requirements file")
                 return InstallResult(
                     success=False,
                     package_name=package_name,
@@ -199,7 +199,7 @@ class PluginInstaller:
                 output=f"Added to requirements-extra.txt: {package_spec}",
             )
         except Exception as e:
-            logger.exception(f"Error writing to requirements file")
+            logger.exception("Error writing to requirements file")
             return InstallResult(
                 success=False,
                 package_name=package_name,
@@ -247,7 +247,7 @@ class PluginInstaller:
                 output=f"Removed from requirements-extra.txt: {package_name}",
             )
         except Exception as e:
-            logger.exception(f"Error removing from requirements file")
+            logger.exception("Error removing from requirements file")
             return InstallResult(
                 success=False,
                 package_name=package_name,
