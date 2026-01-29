@@ -20,6 +20,9 @@ class CatalogListView(PermissionRequiredMixin, View):
     template_name = "netbox_catalog/catalog_list.html"
 
     def get(self, request):
+        # Check if this is an HTMX request for the plugin grid
+        is_htmx = request.headers.get("HX-Request") == "true"
+
         service = CatalogService()
 
         # Get show_uncurated setting
@@ -70,6 +73,14 @@ class CatalogListView(PermissionRequiredMixin, View):
         # Sort: featured first, then by name
         plugins.sort(key=lambda p: (not p.featured, p.name.lower()))
 
+        # For HTMX requests, return just the plugin grid partial
+        if is_htmx:
+            return render(
+                request,
+                "netbox_catalog/_plugin_grid.html",
+                {"plugins": plugins},
+            )
+
         categories = service.get_categories()
         filter_form = PluginFilterForm(request.GET, categories=categories)
 
@@ -77,7 +88,7 @@ class CatalogListView(PermissionRequiredMixin, View):
             request,
             self.template_name,
             {
-                "plugins": plugins,
+                "plugins": [],  # Don't include plugins in initial load
                 "categories": categories,
                 "certification_levels": service.get_certification_levels(),
                 "filter_form": filter_form,
@@ -132,6 +143,18 @@ class PluginInstallView(PermissionRequiredMixin, View):
             return redirect("plugins:netbox_catalog:catalog_list")
 
         installer = PluginInstaller()
+        is_docker = installer.is_docker_environment()
+        pip_available = installer.is_pip_available()
+        requirements_writable = installer.is_requirements_file_writable()
+
+        # Determine install method
+        # Docker with writable requirements = use requirements file
+        # Non-docker with pip = use pip
+        # Otherwise = manual only
+        can_install = pip_available or (is_docker and requirements_writable)
+        install_method = (
+            "requirements" if (is_docker and requirements_writable) else "pip"
+        )
 
         return render(
             request,
@@ -141,6 +164,11 @@ class PluginInstallView(PermissionRequiredMixin, View):
                 "object": plugin,
                 "form": InstallForm(initial={"version": plugin.version}),
                 "config_snippet": installer.generate_config_snippet(name),
+                "is_docker": is_docker,
+                "pip_available": pip_available,
+                "requirements_writable": requirements_writable,
+                "can_install": can_install,
+                "install_method": install_method,
             },
         )
 
@@ -154,6 +182,8 @@ class PluginInstallView(PermissionRequiredMixin, View):
 
         form = InstallForm(request.POST)
         installer = PluginInstaller()
+        is_docker = installer.is_docker_environment()
+        requirements_writable = installer.is_requirements_file_writable()
 
         if not form.is_valid():
             return render(
@@ -183,8 +213,13 @@ class PluginInstallView(PermissionRequiredMixin, View):
             user=request.user,
         )
 
-        # Perform installation
-        result = installer.install(name, version=version, upgrade=upgrade)
+        # Choose install method based on environment
+        if is_docker and requirements_writable:
+            # Docker: add to requirements file
+            result = installer.add_to_requirements(name, version=version)
+        else:
+            # Non-Docker: use pip
+            result = installer.install(name, version=version, upgrade=upgrade)
 
         # Update log
         log.status = (
@@ -199,7 +234,16 @@ class PluginInstallView(PermissionRequiredMixin, View):
         log.save()
 
         if result.success:
-            messages.success(request, f"Successfully installed {name} {result.version}")
+            if is_docker and requirements_writable:
+                messages.success(
+                    request,
+                    f"Added {name} to requirements-extra.txt. "
+                    "Restart the container to complete installation.",
+                )
+            else:
+                messages.success(
+                    request, f"Successfully installed {name} {result.version}"
+                )
             return redirect("plugins:netbox_catalog:plugin_installed", name=name)
         else:
             messages.error(request, f"Failed to install {name}: {result.error}")
@@ -228,6 +272,12 @@ class PluginInstalledView(PermissionRequiredMixin, View):
         plugin = service.get_plugin(name)
         installer = PluginInstaller()
 
+        is_docker = installer.is_docker_environment()
+        requirements_writable = installer.is_requirements_file_writable()
+        install_method = (
+            "requirements" if (is_docker and requirements_writable) else "pip"
+        )
+
         commands = installer.generate_post_install_commands()
 
         return render(
@@ -238,6 +288,8 @@ class PluginInstalledView(PermissionRequiredMixin, View):
                 "object": plugin,
                 "config_snippet": installer.generate_config_snippet(name),
                 "commands": commands,
+                "is_docker": is_docker,
+                "install_method": install_method,
             },
         )
 

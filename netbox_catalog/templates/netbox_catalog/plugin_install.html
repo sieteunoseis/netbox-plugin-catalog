@@ -37,6 +37,19 @@
                 {% endif %}
                 {% endif %}
 
+                {% if install_method == "requirements" %}
+                <!-- Docker with writable requirements file -->
+                <div class="alert alert-info">
+                    <h5><i class="mdi mdi-docker"></i> Docker Installation</h5>
+                    <p class="mb-2">This will add the package to <code>requirements-extra.txt</code>.</p>
+                    <p class="mb-2">After clicking Install, you'll need to:</p>
+                    <ol class="mb-0">
+                        <li>Add the plugin to <code>PLUGINS</code> in <code>configuration/plugins.py</code></li>
+                        <li>Restart the NetBox container: <code>docker-compose down && docker-compose up -d</code></li>
+                    </ol>
+                </div>
+                {% elif can_install %}
+                <!-- Non-Docker with pip available -->
                 <div class="alert alert-info">
                     <h5><i class="mdi mdi-information"></i> Before Installing</h5>
                     <p class="mb-2">After pip installation completes, you will need to:</p>
@@ -47,6 +60,18 @@
                         <li><strong>Restart NetBox</strong></li>
                     </ol>
                 </div>
+                {% else %}
+                <!-- No install method available -->
+                <div class="alert alert-warning">
+                    <h5><i class="mdi mdi-alert"></i> Manual Installation Required</h5>
+                    <p class="mb-2">Automatic installation is not available. To install manually:</p>
+                    <ol class="mb-2">
+                        <li>Add <code>{{ plugin.name }}{% if plugin.version %}>={{ plugin.version }}{% endif %}</code> to <code>requirements-extra.txt</code></li>
+                        <li>Add the plugin to <code>PLUGINS</code> in <code>configuration/plugins.py</code></li>
+                        <li>Restart the NetBox container</li>
+                    </ol>
+                </div>
+                {% endif %}
 
                 <form method="post">
                     {% csrf_token %}
@@ -89,10 +114,22 @@
                     <div class="d-flex justify-content-between">
                         <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}"
                            class="btn btn-outline-secondary">Cancel</a>
+                        {% if can_install %}
                         <button type="submit" class="btn btn-success">
                             <i class="mdi mdi-download"></i>
-                            {% if plugin.installed_version %}Upgrade{% else %}Install{% endif %} {{ plugin.name }}
+                            {% if install_method == "requirements" %}
+                            Add to Requirements
+                            {% elif plugin.installed_version %}
+                            Upgrade {{ plugin.name }}
+                            {% else %}
+                            Install {{ plugin.name }}
+                            {% endif %}
                         </button>
+                        {% else %}
+                        <button type="button" class="btn btn-secondary" disabled>
+                            <i class="mdi mdi-download"></i> Manual Install Required
+                        </button>
+                        {% endif %}
                     </div>
                 </form>
             </div>

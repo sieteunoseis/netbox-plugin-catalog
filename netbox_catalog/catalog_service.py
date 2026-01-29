@@ -53,6 +53,11 @@ class PluginInfo:
     compatibility_reason: str = ""
     compatibility_source: str = "unknown"
 
+    @property
+    def module_name(self) -> str:
+        """Get the Python module name (hyphens to underscores)."""
+        return self.name.replace("-", "_")
+
 
 class CatalogService:
     """Service for managing the plugin catalog."""

@@ -226,7 +226,7 @@
         </div>
 
         <!-- Links -->
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">Links</div>
             <div class="card-body">
                 {% if plugin.home_page %}
@@ -251,6 +251,31 @@
                    class="btn btn-outline-secondary btn-sm w-100">
                     <i class="mdi mdi-package"></i> PyPI
                 </a>
+            </div>
+        </div>
+
+        <!-- Manual Installation -->
+        <div class="card">
+            <div class="card-header">
+                <a class="text-decoration-none" data-bs-toggle="collapse" href="#manualInstall" role="button">
+                    <i class="mdi mdi-console"></i> Manual Installation
+                </a>
+            </div>
+            <div class="collapse" id="manualInstall">
+                <div class="card-body">
+                    <p class="small text-muted mb-2">For Docker or manual installations:</p>
+                    <div class="mb-2">
+                        <label class="form-label small">1. Add to requirements:</label>
+                        <code class="d-block bg-dark text-light p-2 rounded small">{{ plugin.name }}{% if plugin.version %}>={{ plugin.version }}{% endif %}</code>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">2. Add to PLUGINS in configuration.py:</label>
+                        <code class="d-block bg-dark text-light p-2 rounded small">PLUGINS = ["{{ plugin.module_name }}"]</code>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label small">3. Restart NetBox</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

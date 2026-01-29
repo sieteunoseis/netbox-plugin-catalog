@@ -1,6 +1,6 @@
 {% extends 'base/layout.html' %}
 
-{% block title %}{{ plugin.name }} Installed{% endblock %}
+{% block title %}{{ plugin.name }} Added{% endblock %}
 
 {% block breadcrumbs %}
 <li class="breadcrumb-item">
@@ -9,7 +9,7 @@
 <li class="breadcrumb-item">
     <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=plugin.name %}">{{ plugin.name }}</a>
 </li>
-<li class="breadcrumb-item active">Installed</li>
+<li class="breadcrumb-item active">{% if install_method == "requirements" %}Added{% else %}Installed{% endif %}</li>
 {% endblock %}
 
 {% block content %}
@@ -19,10 +19,33 @@
             <div class="card-header bg-success text-white">
                 <h4 class="mb-0">
                     <i class="mdi mdi-check-circle"></i>
+                    {% if install_method == "requirements" %}
+                    Added {{ plugin.name }} to Requirements
+                    {% else %}
                     Successfully Installed {{ plugin.name }}
+                    {% endif %}
                 </h4>
             </div>
             <div class="card-body">
+                {% if install_method == "requirements" %}
+                <!-- Docker installation via requirements file -->
+                <div class="alert alert-warning">
+                    <h5><i class="mdi mdi-alert"></i> Container Restart Required</h5>
+                    <p class="mb-0">The package has been added to <code>requirements-extra.txt</code>. You need to restart the NetBox container to install and activate it.</p>
+                </div>
+
+                <h5>Step 1: Edit configuration/plugins.py</h5>
+                <p>Add the plugin to your plugins configuration:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code>{{ config_snippet }}</code></pre>
+
+                <h5>Step 2: Restart the Container</h5>
+                <p>Restart the NetBox container to install the package and load the plugin:</p>
+                <pre class="bg-dark text-light p-3 rounded"><code>cd /path/to/netbox-docker
+docker-compose down && docker-compose up -d</code></pre>
+                <p class="text-muted small">The container will automatically install packages from requirements-extra.txt on startup, run migrations, and collect static files.</p>
+
+                {% else %}
+                <!-- Traditional pip installation -->
                 <div class="alert alert-warning">
                     <h5><i class="mdi mdi-alert"></i> Action Required</h5>
                     <p class="mb-0">The package has been installed via pip, but you need to complete the following steps to activate it.</p>
@@ -41,12 +64,13 @@
                 <pre class="bg-dark text-light p-3 rounded"><code>{{ commands.collectstatic }}</code></pre>
 
                 <h5>Step 4: Restart NetBox</h5>
-                <p>Restart your NetBox service/container to load the plugin:</p>
+                <p>Restart your NetBox service to load the plugin:</p>
                 <pre class="bg-dark text-light p-3 rounded"><code># Docker Compose
 {{ commands.restart_docker }}
 
 # Systemd
 {{ commands.restart_systemd }}</code></pre>
+                {% endif %}
 
                 <div class="mt-4 d-flex justify-content-between">
                     <a href="{% url 'plugins:netbox_catalog:catalog_list' %}" class="btn btn-outline-secondary">
