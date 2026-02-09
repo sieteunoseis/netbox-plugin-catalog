@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-02-09
+
+### Fixed
+
+- Add missing migration for tags field required by NetBox v4.5.2 (NetBoxModel now includes TagsMixin)
+
 ## [0.1.0] - 2026-01-28
 
 ### Added
