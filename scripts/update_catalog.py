@@ -95,7 +95,16 @@ def parse_netbox_version_from_readme(description, plugin_version=""):
     if not description:
         return {}
 
-    # Try version compatibility table first
+    # Check shields.io badge first (highest trust - explicitly set by author)
+    for pattern in [
+        r"(?:badge|img\.shields\.io/badge)[/]NetBox[-%](\d+\.\d+)",
+        r"!\[.*?NetBox[- ]+(\d+\.\d+)\+?.*?\]",
+    ]:
+        match = re.search(pattern, description)
+        if match:
+            return {"min_version": match.group(1)}
+
+    # Try version compatibility table
     lines = description.split("\n")
     table_rows = []
     in_table = False
@@ -138,8 +147,10 @@ def parse_netbox_version_from_readme(description, plugin_version=""):
         if best:
             return best
 
-    # Inline patterns fallback
+    # Inline patterns fallback (badge first - highest trust)
     for pattern in [
+        r"(?:badge|img\.shields\.io/badge)[/]NetBox[-%](\d+\.\d+)",
+        r"!\[.*?NetBox[- ]+(\d+\.\d+)\+?.*?\]",
         r"NetBox\s*>=\s*(\d+\.\d+(?:\.\d+)?)",
         r"[Rr]equires\s+NetBox\s+(\d+\.\d+(?:\.\d+)?)\+?",
         r"NetBox\s+(\d+\.\d+)(?:\.x)?",

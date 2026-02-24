@@ -226,22 +226,29 @@ def parse_netbox_version_from_readme(
     if not description:
         return {}
 
-    # Step 1: Try to parse a version compatibility table
+    # Step 1: Check for shields.io badge (highest trust - explicitly set by author)
+    badge_patterns = [
+        r"(?:badge|img\.shields\.io/badge)[/]NetBox[-%](\d+\.\d+)",
+        r"!\[.*?NetBox[- ]+(\d+\.\d+)\+?.*?\]",
+    ]
+    for pattern in badge_patterns:
+        match = re.search(pattern, description)
+        if match:
+            return {"min_version": match.group(1)}
+
+    # Step 2: Try to parse a version compatibility table
     table_result = _parse_version_table(description, plugin_version)
     if table_result:
         return table_result
 
-    # Step 2: Fall back to inline patterns
+    # Step 3: Fall back to inline text patterns
     inline_patterns = [
-        # "NetBox >= 4.0" or "NetBox >=4.0.0"
-        (r"NetBox\s*>=\s*(\d+\.\d+(?:\.\d+)?)", "min"),
-        # "Requires NetBox 4.0+" or "requires NetBox 4.0"
-        (r"[Rr]equires\s+NetBox\s+(\d+\.\d+(?:\.\d+)?)\+?", "min"),
-        # "NetBox 4.x" or "NetBox 4.5.x" (implies min version)
-        (r"NetBox\s+(\d+\.\d+)(?:\.x)?", "min"),
+        r"NetBox\s*>=\s*(\d+\.\d+(?:\.\d+)?)",
+        r"[Rr]equires\s+NetBox\s+(\d+\.\d+(?:\.\d+)?)\+?",
+        r"NetBox\s+(\d+\.\d+)(?:\.x)?",
     ]
 
-    for pattern, kind in inline_patterns:
+    for pattern in inline_patterns:
         match = re.search(pattern, description)
         if match:
             return {"min_version": match.group(1)}
