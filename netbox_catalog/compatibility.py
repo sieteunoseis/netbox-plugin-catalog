@@ -1,8 +1,6 @@
 import importlib
 import logging
 import re
-from typing import Optional
-
 from django.conf import settings
 from packaging.version import InvalidVersion, Version
 
