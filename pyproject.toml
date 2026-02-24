@@ -36,6 +36,9 @@ Repository = "https://github.com/sieteunoseis/netbox-plugin-catalog"
 Documentation = "https://github.com/sieteunoseis/netbox-plugin-catalog/wiki"
 Issues = "https://github.com/sieteunoseis/netbox-plugin-catalog/issues"
 
+[tool.isort]
+profile = "black"
+
 [tool.setuptools.packages.find]
 include = ["netbox_catalog*"]
 
