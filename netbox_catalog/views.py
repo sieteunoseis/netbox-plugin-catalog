@@ -1,8 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import View
+from netbox.object_actions import BulkDelete
 from netbox.views import generic
 
 from .catalog_service import CatalogService
@@ -307,6 +308,11 @@ class InstallationLogListView(generic.ObjectListView):
     filterset = InstallationLogFilterSet
     filterset_form = InstallationLogFilterForm
     template_name = "netbox_catalog/installationlog_list.html"
+    actions = (BulkDelete,)
+
+    def get_extra_context(self, request):
+        external_plugins = _get_external_plugins()
+        return {"external_plugins": external_plugins}
 
 
 class InstallationLogView(generic.ObjectView):
@@ -322,6 +328,47 @@ class InstallationLogDeleteView(generic.ObjectDeleteView):
     queryset = InstallationLog.objects.all()
 
 
+class InstallationLogBulkDeleteView(generic.BulkDeleteView):
+    """Bulk delete installation logs."""
+
+    queryset = InstallationLog.objects.all()
+    filterset = InstallationLogFilterSet
+    table = InstallationLogTable
+
+
+class BackfillExternalView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """Record externally-installed plugins in the installation history."""
+
+    permission_required = "netbox_catalog.add_installationlog"
+
+    def post(self, request):
+        external_plugins = _get_external_plugins()
+        now = timezone.now()
+        count = 0
+
+        for pkg in external_plugins:
+            InstallationLog.objects.create(
+                package_name=pkg["name"],
+                version=pkg["version"],
+                action=InstallationLog.Action.MANUAL,
+                status=InstallationLog.Status.SUCCESS,
+                output="Detected in requirements-extra.txt",
+                user=request.user,
+                completed=now,
+            )
+            count += 1
+
+        if count:
+            messages.success(
+                request,
+                f"Recorded {count} externally-installed plugin(s) in history.",
+            )
+        else:
+            messages.info(request, "No externally-installed plugins to record.")
+
+        return redirect("plugins:netbox_catalog:installationlog_list")
+
+
 class RefreshCacheView(PermissionRequiredMixin, View):
     """Refresh the catalog cache."""
 
@@ -332,3 +379,31 @@ class RefreshCacheView(PermissionRequiredMixin, View):
         service.refresh_cache()
         messages.success(request, "Catalog cache refreshed.")
         return redirect("plugins:netbox_catalog:catalog_list")
+
+
+def _get_external_plugins():
+    """Find installed plugins that have no InstallationLog entry."""
+    installer = PluginInstaller()
+    requirements = installer.get_requirements_packages()
+    service = CatalogService()
+    installed = service._get_installed_packages()
+
+    # Get all package names that already have a log entry
+    logged_packages = set(
+        InstallationLog.objects.values_list("package_name", flat=True).distinct()
+    )
+
+    external = []
+    for pkg_name in requirements:
+        # Skip non-netbox packages
+        if not pkg_name.startswith("netbox-") and pkg_name != "netbox-plugin-catalog":
+            continue
+        # Skip if already logged
+        if pkg_name in logged_packages:
+            continue
+        # Get installed version
+        version = installed.get(pkg_name, "")
+        external.append({"name": pkg_name, "version": version})
+
+    external.sort(key=lambda p: p["name"])
+    return external

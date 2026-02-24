@@ -13,3 +13,46 @@
     </li>
 </ul>
 {% endblock %}
+
+{% block content %}
+{% if external_plugins %}
+<div class="card mb-3">
+    <h5 class="card-header bg-info text-white">
+        <span class="mdi mdi-package-variant" aria-hidden="true"></span>
+        {{ external_plugins|length }} Plugin{{ external_plugins|length|pluralize }} Installed Outside Catalog
+    </h5>
+    <div class="card-body">
+        <p class="text-muted mb-3">
+            These plugins were found in <code>requirements-extra.txt</code> but have no installation history.
+            Click the button below to record them in the history log.
+        </p>
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Installed Version</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pkg in external_plugins %}
+                <tr>
+                    <td>
+                        <a href="{% url 'plugins:netbox_catalog:plugin_detail' name=pkg.name %}">{{ pkg.name }}</a>
+                    </td>
+                    <td>{{ pkg.version|default:"unknown" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <form method="post" action="{% url 'plugins:netbox_catalog:backfill_external' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-primary">
+                <span class="mdi mdi-history" aria-hidden="true"></span>
+                Record in History
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

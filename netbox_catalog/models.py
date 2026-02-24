@@ -17,6 +17,7 @@ class InstallationLog(NetBoxModel):
         INSTALL = "install", "Install"
         UPGRADE = "upgrade", "Upgrade"
         UNINSTALL = "uninstall", "Uninstall"
+        MANUAL = "manual", "Installed outside catalog"
 
     package_name = models.CharField(max_length=255, help_text="PyPI package name")
     version = models.CharField(

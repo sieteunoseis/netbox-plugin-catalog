@@ -23,11 +23,21 @@ urlpatterns = [
         "history/", views.InstallationLogListView.as_view(), name="installationlog_list"
     ),
     path(
+        "history/backfill/",
+        views.BackfillExternalView.as_view(),
+        name="backfill_external",
+    ),
+    path(
         "history/<int:pk>/", views.InstallationLogView.as_view(), name="installationlog"
     ),
     path(
         "history/<int:pk>/delete/",
         views.InstallationLogDeleteView.as_view(),
         name="installationlog_delete",
+    ),
+    path(
+        "history/delete/",
+        views.InstallationLogBulkDeleteView.as_view(),
+        name="installationlog_bulk_delete",
     ),
 ]
