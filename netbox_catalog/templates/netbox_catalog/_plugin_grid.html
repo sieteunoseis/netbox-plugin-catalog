@@ -47,9 +47,14 @@
                 {% endif %}
             </div>
 
-            <!-- Version & Author -->
+            <!-- Version & Author & Downloads -->
             <div class="small text-muted">
-                <div>v{{ plugin.version }} by {{ plugin.author|default:"Unknown" }}</div>
+                <div class="d-flex justify-content-between">
+                    <span>v{{ plugin.version }} by {{ plugin.author|default:"Unknown" }}</span>
+                    {% if plugin.downloads_last_month %}
+                    <span title="{{ plugin.downloads_last_month }} downloads last month"><i class="mdi mdi-download"></i> {{ plugin.downloads_display }}/mo</span>
+                    {% endif %}
+                </div>
 
                 {% if plugin.installed_version %}
                 <div class="text-success">

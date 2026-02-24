@@ -1,5 +1,5 @@
 {% extends 'base/layout.html' %}
-{% load helpers %}
+{% load helpers catalog_tags %}
 
 {% block title %}{{ plugin.name }}{% endblock %}
 
@@ -26,7 +26,7 @@
                 {% if plugin.description %}
                 <hr>
                 <div class="plugin-description">
-                    {{ plugin.description|linebreaks }}
+                    {{ plugin|render_description }}
                 </div>
                 {% endif %}
             </div>
@@ -146,6 +146,34 @@
                 {% endif %}
             </div>
         </div>
+
+        <!-- Downloads -->
+        {% if plugin.downloads_last_month %}
+        <div class="card mb-3">
+            <div class="card-header"><i class="mdi mdi-download"></i> Downloads</div>
+            <div class="card-body">
+                <table class="table table-sm mb-0">
+                    <tr>
+                        <th>Last Day</th>
+                        <td class="text-end">{{ plugin.downloads_last_day|default:"0" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Week</th>
+                        <td class="text-end">{{ plugin.downloads_last_week|default:"0" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Month</th>
+                        <td class="text-end"><strong>{{ plugin.downloads_last_month|default:"0" }}</strong></td>
+                    </tr>
+                </table>
+                <div class="text-muted small mt-2">
+                    <a href="https://pypistats.org/packages/{{ plugin.name }}" target="_blank">
+                        View on pypistats.org
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <!-- Compatibility -->
         <div class="card mb-3">

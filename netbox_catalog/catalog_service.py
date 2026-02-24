@@ -1,5 +1,6 @@
 import json
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -22,6 +23,7 @@ class PluginInfo:
     version: str
     summary: str = ""
     description: str = ""
+    description_content_type: str = ""
     author: str = ""
     license: str = ""
     keywords: list = field(default_factory=list)
@@ -43,6 +45,11 @@ class PluginInfo:
     documentation_url: str = ""
     replacement: str = ""
 
+    # Download stats (from pypistats.org)
+    downloads_last_day: int = 0
+    downloads_last_week: int = 0
+    downloads_last_month: int = 0
+
     # Runtime status
     installed_version: str = ""
     is_activated: bool = False
@@ -57,6 +64,16 @@ class PluginInfo:
     def module_name(self) -> str:
         """Get the Python module name (hyphens to underscores)."""
         return self.name.replace("-", "_")
+
+    @property
+    def downloads_display(self) -> str:
+        """Format monthly downloads for display (e.g., '1.2K', '15K')."""
+        count = self.downloads_last_month
+        if count >= 1_000_000:
+            return f"{count / 1_000_000:.1f}M"
+        if count >= 1_000:
+            return f"{count / 1_000:.1f}K"
+        return str(count)
 
 
 class CatalogService:
@@ -101,28 +118,50 @@ class CatalogService:
         return {"plugins": {}, "categories": [], "certification_levels": {}}
 
     def get_all_plugins(self, include_uncurated: bool = True) -> list[PluginInfo]:
-        """Get all available plugins with merged metadata."""
+        """Get all available plugins with merged metadata.
+
+        Download stats come from catalog.json (updated weekly by GitHub Action)
+        to avoid slow pypistats.org API calls on every page load.
+        """
         plugins = []
 
         # Get all netbox packages from PyPI
         package_names = self.pypi_client.get_all_netbox_packages()
 
+        # Filter package names before fetching details
+        if not include_uncurated:
+            curated_plugins = self.curated_data.get("plugins", {})
+            package_names = [n for n in package_names if n in curated_plugins]
+
         # Get installed packages
         installed = self._get_installed_packages()
         activated = self._get_activated_plugins()
 
+        # Fetch PyPI info in parallel (no pypistats - those come from catalog.json)
+        pypi_data = {}
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            futures = {
+                executor.submit(self.pypi_client.get_package_info, name): name
+                for name in package_names
+            }
+            for future in as_completed(futures):
+                name = futures[future]
+                try:
+                    result = future.result()
+                    if result:
+                        pypi_data[name] = result
+                except Exception as e:
+                    logger.debug(f"Error fetching {name}: {e}")
+
+        # Build plugin list (preserving original order)
         for name in package_names:
-            # Check if should show uncurated plugins
+            if name not in pypi_data:
+                continue
+
+            pypi_info = pypi_data[name]
             curated_info = self.curated_data.get("plugins", {}).get(name, {})
-            if not include_uncurated and not curated_info:
-                continue
 
-            # Get PyPI info
-            pypi_info = self.pypi_client.get_package_info(name)
-            if not pypi_info:
-                continue
-
-            # Merge into PluginInfo
+            # Merge into PluginInfo (includes download stats from catalog.json)
             plugin = self._merge_plugin_info(name, pypi_info, curated_info)
 
             # Add runtime status
@@ -134,9 +173,9 @@ class CatalogService:
             module_name = name.replace("-", "_")
             plugin.is_activated = module_name in activated
 
-            # Check compatibility
+            # Check compatibility (pass pypi_info for README fallback parsing)
             compat_info = self.compatibility_checker.get_full_compatibility_info(
-                name, curated_info
+                name, curated_info, pypi_info=pypi_info
             )
             plugin.is_compatible = compat_info.get("compatible", True)
             plugin.compatibility_reason = compat_info.get("reason", "")
@@ -166,13 +205,20 @@ class CatalogService:
         module_name = name.replace("-", "_")
         plugin.is_activated = module_name in activated
 
-        # Check compatibility
+        # Check compatibility (pass pypi_info for README fallback parsing)
         compat_info = self.compatibility_checker.get_full_compatibility_info(
-            name, curated_info
+            name, curated_info, pypi_info=pypi_info
         )
         plugin.is_compatible = compat_info.get("compatible", True)
         plugin.compatibility_reason = compat_info.get("reason", "")
         plugin.compatibility_source = compat_info.get("source", "unknown")
+
+        # Fetch download stats
+        stats = self.pypi_client.get_download_stats(name)
+        if stats:
+            plugin.downloads_last_day = stats.get("last_day", 0)
+            plugin.downloads_last_week = stats.get("last_week", 0)
+            plugin.downloads_last_month = stats.get("last_month", 0)
 
         return plugin
 
@@ -184,11 +230,15 @@ class CatalogService:
         if isinstance(keywords, str):
             keywords = [k.strip() for k in keywords.split(",") if k.strip()]
 
+        # Download stats from catalog.json (updated weekly by GitHub Action)
+        downloads = curated_info.get("downloads", {})
+
         return PluginInfo(
             name=name,
             version=pypi_info.get("version", ""),
             summary=pypi_info.get("summary", ""),
             description=pypi_info.get("description", ""),
+            description_content_type=pypi_info.get("description_content_type", ""),
             author=pypi_info.get("author", ""),
             license=pypi_info.get("license", ""),
             keywords=keywords,
@@ -208,6 +258,10 @@ class CatalogService:
             featured=curated_info.get("featured", False),
             documentation_url=curated_info.get("documentation_url", ""),
             replacement=curated_info.get("replacement", ""),
+            # Download stats from catalog.json
+            downloads_last_day=downloads.get("last_day", 0),
+            downloads_last_week=downloads.get("last_week", 0),
+            downloads_last_month=downloads.get("last_month", 0),
         )
 
     def _get_installed_packages(self) -> dict[str, str]:

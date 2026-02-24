@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "netbox-plugin-catalog"
-version = "0.1.4"
+version = "0.3.0"
 description = "A NetBox plugin for browsing and installing third-party plugins"
 readme = "README.md"
 license = {text = "Apache-2.0"}
@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
     "requests>=2.28.0",
     "packaging>=21.0",
+    "markdown>=3.4.0",
 ]
 
 [project.urls]

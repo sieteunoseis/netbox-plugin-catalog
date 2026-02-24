@@ -83,6 +83,11 @@ class PyPIClient:
 
             # Extract relevant info
             info = data.get("info", {})
+            # Extract short license name from classifiers or license field
+            license_name = self._extract_license_name(
+                info.get("license"), info.get("classifiers", [])
+            )
+
             package_info = {
                 "name": info.get("name"),
                 "version": info.get("version"),
@@ -92,7 +97,7 @@ class PyPIClient:
                 "author": info.get("author")
                 or self._extract_author_from_email(info.get("author_email")),
                 "author_email": info.get("author_email"),
-                "license": info.get("license"),
+                "license": license_name,
                 "keywords": info.get("keywords"),
                 "classifiers": info.get("classifiers", []),
                 "requires_python": info.get("requires_python"),
@@ -117,6 +122,53 @@ class PyPIClient:
         if "<" in email_field:
             return email_field.split("<")[0].strip()
         return email_field
+
+    def _extract_license_name(self, license_field: str, classifiers: list) -> str:
+        """Extract short license name from classifiers or license field.
+
+        PyPI license field often contains the full license text. Classifiers
+        are more reliable for getting just the license name.
+        """
+        # Try classifiers first (most reliable)
+        for c in classifiers:
+            if c.startswith("License :: OSI Approved :: "):
+                return c.split(" :: ")[-1]
+
+        # If license field is short enough, use it directly
+        if license_field and len(license_field) <= 100:
+            return license_field
+
+        # License field is full text - return generic label
+        if license_field:
+            return "See PyPI"
+        return ""
+
+    def get_download_stats(self, package_name: str) -> Optional[dict]:
+        """Fetch download statistics from pypistats.org API."""
+        cache_key = f"netbox_catalog:downloads:{package_name}"
+        cached = cache.get(cache_key)
+        if cached:
+            return cached
+
+        try:
+            url = f"https://pypistats.org/api/packages/{package_name}/recent"
+            response = requests.get(
+                url,
+                headers={"Accept": "application/json"},
+                timeout=10,
+            )
+            response.raise_for_status()
+            data = response.json().get("data", {})
+            stats = {
+                "last_day": data.get("last_day", 0),
+                "last_week": data.get("last_week", 0),
+                "last_month": data.get("last_month", 0),
+            }
+            cache.set(cache_key, stats, self.cache_timeout)
+            return stats
+        except requests.RequestException as e:
+            logger.debug(f"Failed to fetch download stats for {package_name}: {e}")
+            return None
 
     def clear_cache(self):
         """Clear all cached PyPI data."""

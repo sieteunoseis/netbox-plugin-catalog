@@ -49,7 +49,7 @@
             </div>
             <div class="card-body">
                 <!-- Filters -->
-                <form method="get" class="row g-3 mb-4"
+                <form method="get" class="row g-2 mb-4"
                       hx-get="{% url 'plugins:netbox_catalog:catalog_list' %}"
                       hx-target="#plugin-grid"
                       hx-swap="innerHTML"
@@ -67,7 +67,7 @@
                         {{ filter_form.status }}
                     </div>
                     <div class="col-md-2">
-                        {{ filter_form.compatibility }}
+                        {{ filter_form.sort }}
                     </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-primary w-100">

@@ -49,6 +49,15 @@ class PluginFilterForm(forms.Form):
         ],
         widget=forms.Select(attrs={"class": "form-select"}),
     )
+    sort = forms.ChoiceField(
+        required=False,
+        choices=[
+            ("name", "Name"),
+            ("downloads", "Most Downloads"),
+            ("version", "Recently Updated"),
+        ],
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
     show_uncurated = forms.BooleanField(
         required=False,
         initial=True,

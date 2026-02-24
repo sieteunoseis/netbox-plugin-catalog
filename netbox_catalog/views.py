@@ -70,8 +70,13 @@ class CatalogListView(PermissionRequiredMixin, View):
                 or search_lower in (p.author or "").lower()
             ]
 
-        # Sort: featured first, then by name
-        plugins.sort(key=lambda p: (not p.featured, p.name.lower()))
+        # Sort
+        sort = request.GET.get("sort", "name")
+        if sort == "downloads":
+            plugins.sort(key=lambda p: (-p.downloads_last_month, p.name.lower()))
+        else:
+            # Default: featured first, then alphabetical
+            plugins.sort(key=lambda p: (not p.featured, p.name.lower()))
 
         # For HTMX requests, return just the plugin grid partial
         if is_htmx:
