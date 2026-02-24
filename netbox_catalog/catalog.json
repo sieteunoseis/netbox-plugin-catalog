@@ -33,9 +33,28 @@
             "featured": true,
             "documentation_url": "https://github.com/netbox-community/netbox-acls"
         },
+        "netbox-agent": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "NetBox agent for server",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 55,
+                "last_week": 378,
+                "last_month": 616
+            }
+        },
         "netbox-atlassian": {
             "category": "Integration",
-            "tags": ["atlassian", "jira", "confluence"],
+            "tags": [
+                "atlassian",
+                "jira",
+                "confluence"
+            ],
             "certification": "compatible",
             "netbox_min_version": "4.0.0",
             "netbox_max_version": null,
@@ -52,7 +71,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.4",
             "netbox_max_version": null,
             "notes": "Netbox plugin to manage attachments for any model",
             "recommended": true,
@@ -67,7 +86,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "0.1.0",
             "netbox_max_version": null,
             "notes": "NetBox plugin for modeling AWS VPCs in NetBox",
             "recommended": true,
@@ -111,13 +130,33 @@
             "netbox_max_version": null,
             "notes": "Cisco Catalyst Center (DNA Center) integration",
             "recommended": true,
-            "documentation_url": "https://github.com/sieteunoseis/netbox-catalyst-center"
+            "documentation_url": "https://github.com/sieteunoseis/netbox-catalyst-center",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 16,
+                "last_month": 1021
+            }
+        },
+        "netbox-cesnet-services-plugin": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "4.4",
+            "netbox_max_version": null,
+            "notes": "NetBox plugin for CESNET services.",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 2,
+                "last_week": 12,
+                "last_month": 113
+            }
         },
         "netbox-circuitmaintenance": {
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "3.4",
             "netbox_max_version": null,
             "notes": "Provides the ability to record circuit maintenance, maintenance impact and maintenance notifications in Netbox and link them to Providers and Circuits.",
             "recommended": true,
@@ -130,7 +169,12 @@
         },
         "netbox-cisco-ise": {
             "category": "Integration",
-            "tags": ["cisco", "ise", "nac", "security"],
+            "tags": [
+                "cisco",
+                "ise",
+                "nac",
+                "security"
+            ],
             "certification": "compatible",
             "netbox_min_version": "4.0.0",
             "netbox_max_version": null,
@@ -173,6 +217,21 @@
                 "last_month": 120
             }
         },
+        "netbox-cloudflare-plugin": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Manage Cloudflare with Netbox & style.",
+            "recommended": true,
+            "documentation_url": "https://github.com/SaaShup/netbox-cloudflare-plugin",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 28,
+                "last_month": 133
+            }
+        },
         "netbox-config-backup": {
             "category": "Other",
             "tags": [],
@@ -192,7 +251,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.4",
             "netbox_max_version": null,
             "notes": "NetBox plugin to manage Podman/Docker container environments",
             "recommended": true,
@@ -201,6 +260,36 @@
                 "last_day": 0,
                 "last_week": 7,
                 "last_month": 109
+            }
+        },
+        "netbox-contextmenus": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Add context menu to links in NetBox",
+            "recommended": true,
+            "documentation_url": "https://github.com/PieterL75/netbox_contextmenus",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 66,
+                "last_month": 346
+            }
+        },
+        "netbox-cvexplorer": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "NetBox Plugin zur Anzeige und Verwaltung von CVE-Informationen",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 0,
+                "last_month": 266
             }
         },
         "netbox-data-flows": {
@@ -235,6 +324,36 @@
                 "last_day": 2,
                 "last_week": 16,
                 "last_month": 394
+            }
+        },
+        "netbox-device-support-plugin": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Cisco device support, device type support, and software release information with the Cisco support APIs",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 2,
+                "last_week": 10,
+                "last_month": 343
+            }
+        },
+        "netbox-device-view": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "NetBox Device View plugin",
+            "recommended": true,
+            "documentation_url": "https://github.com/peterbaumert/netbox-device-view",
+            "downloads": {
+                "last_day": 6,
+                "last_week": 104,
+                "last_month": 721
             }
         },
         "netbox-devicetype-importer": {
@@ -283,7 +402,13 @@
         },
         "netbox-endpoints": {
             "category": "Infrastructure",
-            "tags": ["endpoints", "badges", "phones", "iot", "wireless"],
+            "tags": [
+                "endpoints",
+                "badges",
+                "phones",
+                "iot",
+                "wireless"
+            ],
             "certification": "compatible",
             "netbox_min_version": "4.0.0",
             "netbox_max_version": null,
@@ -315,7 +440,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "0.3.2",
             "netbox_max_version": null,
             "notes": "Netbox Plugin to support graphical floorplans",
             "recommended": true,
@@ -345,7 +470,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.1",
             "netbox_max_version": null,
             "notes": "Manage simple prefix default gateways",
             "recommended": true,
@@ -420,6 +545,21 @@
                 "last_month": 830
             }
         },
+        "netbox-interface-name-rules": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "NetBox plugin for automatic interface renaming when modules are installed",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 5,
+                "last_week": 103,
+                "last_month": 103
+            }
+        },
         "netbox-interface-synchronization": {
             "category": "Other",
             "tags": [],
@@ -439,7 +579,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "3.5.0",
             "netbox_max_version": null,
             "notes": "NetBox Plugin for viewing interfaces in a grid layout with VLAN color-coding",
             "recommended": true,
@@ -469,8 +609,8 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
-            "netbox_max_version": null,
+            "netbox_min_version": "0.0.0",
+            "netbox_max_version": "0.1.0",
             "notes": "Visual representation of IP addresses",
             "recommended": true,
             "documentation_url": "https://github.com/Future998/netbox-ip-monitor",
@@ -499,8 +639,8 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
-            "netbox_max_version": null,
+            "netbox_min_version": "3.7",
+            "netbox_max_version": "4.2",
             "notes": "Netbox IP Calculator and Subnet Splitter",
             "recommended": true,
             "documentation_url": "https://github.com/PieterL75/netbox_ipcalculator",
@@ -514,7 +654,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.0",
             "netbox_max_version": null,
             "notes": null,
             "recommended": true,
@@ -559,6 +699,21 @@
                 "last_month": 1126
             }
         },
+        "netbox-license": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Inventory License management in NetBox",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 47,
+                "last_month": 115
+            }
+        },
         "netbox-lifecycle": {
             "category": "Infrastructure",
             "tags": [
@@ -599,6 +754,21 @@
                 "last_month": 4120
             }
         },
+        "netbox-load-balancing": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "1.3.0",
+            "netbox_max_version": null,
+            "notes": "NetBox Load Balancing is a NetBox plugin that models a Load Balancing service based on the OpenStack SLB modelling",
+            "recommended": true,
+            "documentation_url": "https://github.com/andy-shady-org/netbox-load-balancing",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 11,
+                "last_month": 114
+            }
+        },
         "netbox-loadbalancer-plugin": {
             "category": "Other",
             "tags": [],
@@ -618,7 +788,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.5",
             "netbox_max_version": null,
             "notes": "NetBox plugin for device maintenance management with comprehensive REST API and Portuguese-BR support",
             "recommended": true,
@@ -648,7 +818,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.4",
             "netbox_max_version": null,
             "notes": "NetBox plugin for synchronizing Cisco Meraki Dashboard networks, devices, VLANs, and prefixes",
             "recommended": true,
@@ -674,6 +844,21 @@
                 "last_month": 789
             }
         },
+        "netbox-more-metrics": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Provide customized metrics on data stored in NetBox.",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 30,
+                "last_week": 88,
+                "last_month": 294
+            }
+        },
         "netbox-napalm-plugin": {
             "category": "Automation",
             "tags": [
@@ -691,6 +876,36 @@
                 "last_day": 169,
                 "last_week": 1038,
                 "last_month": 4082
+            }
+        },
+        "netbox-ninja-plugin": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Dynamic configuration files and images from NetBox.",
+            "recommended": true,
+            "documentation_url": "https://rautanen.io",
+            "downloads": {
+                "last_day": 2,
+                "last_week": 22,
+                "last_month": 170
+            }
+        },
+        "netbox-nornir": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 40,
+                "last_month": 121
             }
         },
         "netbox-otp-plugin": {
@@ -727,7 +942,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "0.2.0",
             "netbox_max_version": null,
             "notes": "BGP related stuff",
             "recommended": true,
@@ -783,11 +998,26 @@
                 "last_month": 434
             }
         },
+        "netbox-plugin-catalog": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "4.0",
+            "netbox_max_version": null,
+            "notes": "A NetBox plugin for browsing and installing third-party plugins",
+            "recommended": true,
+            "documentation_url": "https://github.com/sieteunoseis/netbox-plugin-catalog",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 6,
+                "last_month": 488
+            }
+        },
         "netbox-plugin-dhcp": {
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.5",
             "netbox_max_version": null,
             "notes": "NetBox DHCP is a NetBox plugin for DHCP data.",
             "recommended": true,
@@ -818,6 +1048,21 @@
                 "last_month": 13153
             }
         },
+        "netbox-plugin-prometheus-sd": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "A Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 60,
+                "last_week": 529,
+                "last_month": 4512
+            }
+        },
         "netbox-plugin-reloader": {
             "category": "Other",
             "tags": [],
@@ -833,6 +1078,21 @@
                 "last_month": 250
             }
         },
+        "netbox-plugin-webhook-receiver": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "4.1",
+            "netbox_max_version": null,
+            "notes": "NetBox Webhook is a plugin for managing webhook receivers in NetBox.",
+            "recommended": true,
+            "documentation_url": "https://github.com/LuPo/netbox-plugin-webhook-receiver",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 0,
+                "last_month": 110
+            }
+        },
         "netbox-proxbox": {
             "category": "Other",
             "tags": [],
@@ -846,6 +1106,21 @@
                 "last_day": 28,
                 "last_week": 134,
                 "last_month": 530
+            }
+        },
+        "netbox-prtg": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "4.0",
+            "netbox_max_version": null,
+            "notes": "NetBox plugin to display PRTG monitoring status on device pages",
+            "recommended": true,
+            "documentation_url": "https://github.com/sieteunoseis/netbox-prtg",
+            "downloads": {
+                "last_day": 1,
+                "last_week": 1,
+                "last_month": 494
             }
         },
         "netbox-ptov": {
@@ -908,6 +1183,21 @@
                 "last_month": 553
             }
         },
+        "netbox-routing-complex": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Add your description here",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 387,
+                "last_month": 648
+            }
+        },
         "netbox-scion": {
             "category": "Other",
             "tags": [],
@@ -923,11 +1213,26 @@
                 "last_month": 112
             }
         },
-        "netbox-security": {
+        "netbox-scripts-lib": {
             "category": "Other",
             "tags": [],
             "certification": "untested",
             "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Shared lib of functions and tools for NetBox Custom Scripts",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 4,
+                "last_week": 14,
+                "last_month": 189
+            }
+        },
+        "netbox-security": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "1.4.0",
             "netbox_max_version": null,
             "notes": "A Netbox plugin for tracking Security and NAT related objects",
             "recommended": true,
@@ -966,6 +1271,21 @@
                 "last_day": 0,
                 "last_week": 24,
                 "last_month": 123
+            }
+        },
+        "netbox-slm": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Software Lifecycle Management Netbox Plugin",
+            "recommended": true,
+            "documentation_url": "https://github.com/ICTU/netbox_slm/",
+            "downloads": {
+                "last_day": 2,
+                "last_week": 28,
+                "last_month": 298
             }
         },
         "netbox-storage": {
@@ -1013,6 +1333,21 @@
                 "last_month": 38800
             }
         },
+        "netbox-unacceptable-events-users-computers": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Netbox plugin. Assign devices and virtual machines and application systems to information security unacceptable events",
+            "recommended": true,
+            "documentation_url": "",
+            "downloads": {
+                "last_day": 0,
+                "last_week": 0,
+                "last_month": 393
+            }
+        },
         "netbox-users-and-computers": {
             "category": "Other",
             "tags": [],
@@ -1032,7 +1367,7 @@
             "category": "Other",
             "tags": [],
             "certification": "untested",
-            "netbox_min_version": "",
+            "netbox_min_version": "4.1",
             "netbox_max_version": null,
             "notes": "NetBox plugin for network devices validation",
             "recommended": true,
@@ -1045,7 +1380,12 @@
         },
         "netbox-vcenter-server": {
             "category": "Integration",
-            "tags": ["vmware", "vcenter", "virtualization", "vms"],
+            "tags": [
+                "vmware",
+                "vcenter",
+                "virtualization",
+                "vms"
+            ],
             "certification": "compatible",
             "netbox_min_version": "4.0.0",
             "netbox_max_version": null,
@@ -1060,7 +1400,12 @@
         },
         "netbox-vitalqip": {
             "category": "Integration",
-            "tags": ["vitalqip", "ipam", "dns", "import"],
+            "tags": [
+                "vitalqip",
+                "ipam",
+                "dns",
+                "import"
+            ],
             "certification": "compatible",
             "netbox_min_version": "4.0.0",
             "netbox_max_version": null,
