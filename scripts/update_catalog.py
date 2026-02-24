@@ -182,7 +182,10 @@ def update_catalog():
         if not data.get("netbox_min_version") and not data.get("netbox_max_version")
     ]
     if plugins_missing_versions:
-        print(f"\nChecking READMEs for {len(plugins_missing_versions)} plugins missing version constraints...")
+        print(
+            f"\nChecking READMEs for {len(plugins_missing_versions)}"
+            " plugins missing version constraints..."
+        )
         updated_versions = 0
         for name in plugins_missing_versions:
             info = get_package_info(name)
@@ -199,7 +202,9 @@ def update_catalog():
                             "max_version"
                         ]
                     updated_versions += 1
-                    print(f"  {name}: min={version_info.get('min_version', '')} max={version_info.get('max_version', '')}")
+                    min_v = version_info.get("min_version", "")
+                    max_v = version_info.get("max_version", "")
+                    print(f"  {name}: min={min_v} max={max_v}")
             # Rate limit
             time.sleep(0.5)
         print(f"Updated version constraints for {updated_versions} plugins")
