@@ -55,6 +55,9 @@
                     <span title="{{ plugin.downloads_last_month }} downloads last month"><i class="mdi mdi-download"></i> {{ plugin.downloads_display }}/mo</span>
                     {% endif %}
                 </div>
+                {% if plugin.last_updated %}
+                <div><i class="mdi mdi-update"></i> Updated {{ plugin.last_updated|slice:":10" }}</div>
+                {% endif %}
 
                 {% if plugin.installed_version %}
                 <div class="text-success">

@@ -75,6 +75,9 @@ class CatalogListView(PermissionRequiredMixin, View):
         sort = request.GET.get("sort", "name")
         if sort == "downloads":
             plugins.sort(key=lambda p: (-p.downloads_last_month, p.name.lower()))
+        elif sort == "version":
+            # Recently updated: sort by PyPI upload time (newest first)
+            plugins.sort(key=lambda p: (p.last_updated or ""), reverse=True)
         else:
             # Default: featured first, then alphabetical
             plugins.sort(key=lambda p: (not p.featured, p.name.lower()))

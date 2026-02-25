@@ -106,6 +106,7 @@ class PyPIClient:
                 "home_page": info.get("home_page")
                 or (info.get("project_urls") or {}).get("Homepage"),
                 "releases": list(data.get("releases", {}).keys()),
+                "last_updated": self._get_latest_upload_time(data.get("releases", {})),
             }
 
             cache.set(cache_key, package_info, self.cache_timeout)
@@ -114,6 +115,16 @@ class PyPIClient:
         except requests.RequestException as e:
             logger.error(f"Failed to fetch package info for {package_name}: {e}")
             return None
+
+    def _get_latest_upload_time(self, releases: dict) -> str:
+        """Get the upload time of the most recent release."""
+        latest = ""
+        for files in releases.values():
+            for f in files:
+                upload_time = f.get("upload_time_iso_8601") or f.get("upload_time", "")
+                if upload_time > latest:
+                    latest = upload_time
+        return latest
 
     def _extract_author_from_email(self, email_field: str) -> str:
         """Extract author name from 'Name <email>' format."""
@@ -172,5 +183,9 @@ class PyPIClient:
 
     def clear_cache(self):
         """Clear all cached PyPI data."""
+        # Clear package list and all individual package caches
+        packages = cache.get("netbox_catalog:pypi_packages") or []
+        for name in packages:
+            cache.delete(f"netbox_catalog:package:{name}")
+            cache.delete(f"netbox_catalog:downloads:{name}")
         cache.delete("netbox_catalog:pypi_packages")
-        # Note: Individual package caches would need to be tracked to clear

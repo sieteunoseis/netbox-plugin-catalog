@@ -32,6 +32,7 @@ class PluginInfo:
     requires_python: str = ""
     requires_dist: list = field(default_factory=list)
     releases: list = field(default_factory=list)
+    last_updated: str = ""
 
     # From curated catalog
     category: str = "Other"
@@ -247,6 +248,7 @@ class CatalogService:
             requires_python=pypi_info.get("requires_python", ""),
             requires_dist=pypi_info.get("requires_dist") or [],
             releases=pypi_info.get("releases", []),
+            last_updated=pypi_info.get("last_updated", ""),
             # Curated overrides
             category=curated_info.get("category", "Other"),
             tags=curated_info.get("tags", []),
