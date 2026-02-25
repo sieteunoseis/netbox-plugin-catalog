@@ -1,14 +1,14 @@
 from netbox.plugins import PluginConfig
 
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 
 class NetBoxCatalogConfig(PluginConfig):
     name = "netbox_catalog"
-    verbose_name = "Plugin Catalog"
+    verbose_name = "NetBox Plugin Catalog"
     description = "Browse and install third-party NetBox plugins"
     version = __version__
-    author = "sieteunoseis"
+    author = "Jeremy Worden"
     author_email = "sieteunoseis@gmail.com"
     base_url = "catalog"
     min_version = "4.0.0"
