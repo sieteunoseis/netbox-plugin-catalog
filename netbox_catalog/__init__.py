@@ -1,6 +1,6 @@
 from netbox.plugins import PluginConfig
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 
 
 class NetBoxCatalogConfig(PluginConfig):
@@ -19,6 +19,7 @@ class NetBoxCatalogConfig(PluginConfig):
         "allow_install": True,  # Enable/disable pip install feature
         "show_uncurated": True,  # Show plugins not in curated list
         "pypi_index_url": "https://pypi.org",  # PyPI mirror support
+        "superuser_only": True,  # Restrict all views to superusers
     }
 
 

@@ -1,5 +1,6 @@
+from django.conf import settings as django_settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import View
@@ -11,10 +12,20 @@ from .filtersets import InstallationLogFilterSet
 from .forms import InstallationLogFilterForm, InstallForm, PluginFilterForm
 from .installer import PluginInstaller
 from .models import InstallationLog
+
+
+class SuperuserIfConfiguredMixin(UserPassesTestMixin):
+    """Restrict access to superusers when superuser_only setting is True."""
+
+    def test_func(self):
+        config = django_settings.PLUGINS_CONFIG.get("netbox_catalog", {})
+        if config.get("superuser_only", True):
+            return self.request.user.is_superuser
+        return True
 from .tables import InstallationLogTable
 
 
-class CatalogListView(PermissionRequiredMixin, View):
+class CatalogListView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
     """Browse available plugins."""
 
     permission_required = "netbox_catalog.view_installationlog"
@@ -106,7 +117,7 @@ class CatalogListView(PermissionRequiredMixin, View):
         )
 
 
-class PluginDetailView(PermissionRequiredMixin, View):
+class PluginDetailView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
     """View plugin details."""
 
     permission_required = "netbox_catalog.view_installationlog"
@@ -137,7 +148,7 @@ class PluginDetailView(PermissionRequiredMixin, View):
         )
 
 
-class PluginInstallView(PermissionRequiredMixin, View):
+class PluginInstallView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
     """Install a plugin."""
 
     permission_required = "netbox_catalog.add_installationlog"
@@ -270,7 +281,7 @@ class PluginInstallView(PermissionRequiredMixin, View):
             )
 
 
-class PluginInstalledView(PermissionRequiredMixin, View):
+class PluginInstalledView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
     """Post-installation instructions."""
 
     permission_required = "netbox_catalog.view_installationlog"
@@ -303,7 +314,7 @@ class PluginInstalledView(PermissionRequiredMixin, View):
         )
 
 
-class InstallationLogListView(generic.ObjectListView):
+class InstallationLogListView(SuperuserIfConfiguredMixin, generic.ObjectListView):
     """View installation history."""
 
     queryset = InstallationLog.objects.all()
@@ -318,20 +329,20 @@ class InstallationLogListView(generic.ObjectListView):
         return {"external_plugins": external_plugins}
 
 
-class InstallationLogView(generic.ObjectView):
+class InstallationLogView(SuperuserIfConfiguredMixin, generic.ObjectView):
     """View single installation log."""
 
     queryset = InstallationLog.objects.all()
     template_name = "netbox_catalog/installationlog.html"
 
 
-class InstallationLogDeleteView(generic.ObjectDeleteView):
+class InstallationLogDeleteView(SuperuserIfConfiguredMixin, generic.ObjectDeleteView):
     """Delete installation log."""
 
     queryset = InstallationLog.objects.all()
 
 
-class InstallationLogBulkDeleteView(generic.BulkDeleteView):
+class InstallationLogBulkDeleteView(SuperuserIfConfiguredMixin, generic.BulkDeleteView):
     """Bulk delete installation logs."""
 
     queryset = InstallationLog.objects.all()
@@ -339,7 +350,7 @@ class InstallationLogBulkDeleteView(generic.BulkDeleteView):
     table = InstallationLogTable
 
 
-class BackfillExternalView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class BackfillExternalView(SuperuserIfConfiguredMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
     """Record externally-installed plugins in the installation history."""
 
     permission_required = "netbox_catalog.add_installationlog"
@@ -372,7 +383,7 @@ class BackfillExternalView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return redirect("plugins:netbox_catalog:installationlog_list")
 
 
-class RefreshCacheView(PermissionRequiredMixin, View):
+class RefreshCacheView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
     """Refresh the catalog cache."""
 
     permission_required = "netbox_catalog.add_installationlog"
