@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "last_updated": "2026-07-06",
+    "last_updated": "2026-07-13",
     "plugins": {
         "netbox-access-lists": {
             "category": "Other",
@@ -232,9 +232,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/CESNET/netbox_authorized_keys",
             "downloads": {
-                "last_day": 1,
-                "last_week": 17,
-                "last_month": 100
+                "last_day": 0,
+                "last_week": 22,
+                "last_month": 139
             }
         },
         "netbox-aws-vpc-plugin": {
@@ -342,9 +342,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/TheFlyingCorpse/netbox-cabinet-view",
             "downloads": {
-                "last_day": 0,
-                "last_week": 48,
-                "last_month": 131
+                "last_day": 4,
+                "last_week": 44,
+                "last_month": 230
             }
         },
         "netbox-cable-labels": {
@@ -408,8 +408,8 @@
             "documentation_url": "https://github.com/emersonfelipesp/netbox-ceph",
             "downloads": {
                 "last_day": 0,
-                "last_week": 47,
-                "last_month": 192
+                "last_week": 57,
+                "last_month": 212
             }
         },
         "netbox-cesnet-services-plugin": {
@@ -717,9 +717,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/sieteunoseis/netbox-custom-widget",
             "downloads": {
-                "last_day": 4,
-                "last_week": 41,
-                "last_month": 174
+                "last_day": 0,
+                "last_week": 35,
+                "last_month": 133
             }
         },
         "netbox-cvexplorer": {
@@ -751,9 +751,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/Alef-Burzmali/netbox-data-flows",
             "downloads": {
-                "last_day": 24,
-                "last_week": 488,
-                "last_month": 2096
+                "last_day": 66,
+                "last_week": 347,
+                "last_month": 2033
             }
         },
         "netbox-data-import": {
@@ -1006,6 +1006,21 @@
                 "last_month": 104
             }
         },
+        "netbox-eosl": {
+            "category": "Other",
+            "tags": [],
+            "certification": "untested",
+            "netbox_min_version": "",
+            "netbox_max_version": null,
+            "notes": "Show source-backed hardware end-of-service-life status on NetBox Devices and Device Types, from EOSL.ai.",
+            "recommended": true,
+            "documentation_url": "https://eosl.ai/",
+            "downloads": {
+                "last_day": 2,
+                "last_week": 142,
+                "last_month": 142
+            }
+        },
         "netbox-excel": {
             "category": "Other",
             "tags": [],
@@ -1076,9 +1091,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/netbox-community/netbox-floorplan-plugin.git",
             "downloads": {
-                "last_day": 129,
-                "last_week": 2596,
-                "last_month": 10229
+                "last_day": 393,
+                "last_week": 3375,
+                "last_month": 11867
             }
         },
         "netbox-fms": {
@@ -1245,9 +1260,9 @@
             "recommended": true,
             "documentation_url": "",
             "downloads": {
-                "last_day": 8,
-                "last_week": 316,
-                "last_month": 1060
+                "last_day": 9,
+                "last_week": 183,
+                "last_month": 1061
             }
         },
         "netbox-interface-name-rules": {
@@ -1609,9 +1624,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/andy-shady-org/netbox-load-balancing",
             "downloads": {
-                "last_day": 9,
-                "last_week": 245,
-                "last_month": 498
+                "last_day": 1,
+                "last_week": 40,
+                "last_month": 458
             }
         },
         "netbox-loadbalancer-plugin": {
@@ -1729,9 +1744,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/Onemind-Services-LLC/netbox-metatype-importer",
             "downloads": {
-                "last_day": 11,
-                "last_week": 121,
-                "last_month": 569
+                "last_day": 9,
+                "last_week": 131,
+                "last_month": 531
             }
         },
         "netbox-more-metrics": {
@@ -1778,9 +1793,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/netbox-community/netbox-napalm-plugin",
             "downloads": {
-                "last_day": 46,
-                "last_week": 983,
-                "last_month": 4967
+                "last_day": 142,
+                "last_week": 1243,
+                "last_month": 5582
             }
         },
         "netbox-network-canvas-plugin": {
@@ -2669,8 +2684,8 @@
             "documentation_url": "https://github.com/kkthxbye-code/netbox_script_manager",
             "downloads": {
                 "last_day": 0,
-                "last_week": 18,
-                "last_month": 80
+                "last_week": 2,
+                "last_month": 34
             }
         },
         "netbox-scripthelper": {
@@ -2848,9 +2863,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/jsenecal/netbox-sqids",
             "downloads": {
-                "last_day": 4,
-                "last_week": 140,
-                "last_month": 194
+                "last_day": 1,
+                "last_week": 13,
+                "last_month": 198
             }
         },
         "netbox-sqlquery": {
@@ -2968,9 +2983,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/jysk-dev/netbox-sync-status",
             "downloads": {
-                "last_day": 1,
-                "last_week": 39,
-                "last_month": 117
+                "last_day": 0,
+                "last_week": 18,
+                "last_month": 80
             }
         },
         "netbox-textdatastore": {
@@ -3028,9 +3043,9 @@
             "recommended": true,
             "documentation_url": "https://github.com/mattieserver/netbox-topology-views",
             "downloads": {
-                "last_day": 1272,
-                "last_week": 11953,
-                "last_month": 45688
+                "last_day": 1067,
+                "last_week": 12181,
+                "last_month": 51293
             }
         },
         "netbox-tunnels2": {
@@ -3059,8 +3074,8 @@
             "documentation_url": "https://github.com/retigra/netbox-types",
             "downloads": {
                 "last_day": 0,
-                "last_week": 14,
-                "last_month": 75
+                "last_week": 23,
+                "last_month": 55
             }
         },
         "netbox-unacceptable-events": {
@@ -3134,8 +3149,8 @@
             "documentation_url": "",
             "downloads": {
                 "last_day": 1,
-                "last_week": 24,
-                "last_month": 111
+                "last_week": 17,
+                "last_month": 63
             }
         },
         "netbox-validity": {
@@ -3148,9 +3163,9 @@
             "recommended": true,
             "documentation_url": "",
             "downloads": {
-                "last_day": 31,
-                "last_week": 774,
-                "last_month": 2914
+                "last_day": 21,
+                "last_week": 520,
+                "last_month": 2958
             }
         },
         "netbox-vcenter-server": {
@@ -3353,9 +3368,9 @@
             "recommended": true,
             "documentation_url": "",
             "downloads": {
-                "last_day": 4,
-                "last_week": 22,
-                "last_month": 126
+                "last_day": 2,
+                "last_week": 13,
+                "last_month": 62
             }
         },
         "nextbox-ui-plugin": {
