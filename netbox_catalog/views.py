@@ -1,6 +1,10 @@
 from django.conf import settings as django_settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import View
@@ -22,6 +26,8 @@ class SuperuserIfConfiguredMixin(UserPassesTestMixin):
         if config.get("superuser_only", True):
             return self.request.user.is_superuser
         return True
+
+
 from .tables import InstallationLogTable
 
 
@@ -350,7 +356,9 @@ class InstallationLogBulkDeleteView(SuperuserIfConfiguredMixin, generic.BulkDele
     table = InstallationLogTable
 
 
-class BackfillExternalView(SuperuserIfConfiguredMixin, LoginRequiredMixin, PermissionRequiredMixin, View):
+class BackfillExternalView(
+    SuperuserIfConfiguredMixin, LoginRequiredMixin, PermissionRequiredMixin, View
+):
     """Record externally-installed plugins in the installation history."""
 
     permission_required = "netbox_catalog.add_installationlog"
