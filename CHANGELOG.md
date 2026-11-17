@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-17
+
+### Fixed
+- flake8 CI failure (E402 import below class in views.py)
+
 ## [0.4.0] - 2026-11-17
 
 ### Added

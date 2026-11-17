@@ -16,6 +16,7 @@ from .filtersets import InstallationLogFilterSet
 from .forms import InstallationLogFilterForm, InstallForm, PluginFilterForm
 from .installer import PluginInstaller
 from .models import InstallationLog
+from .tables import InstallationLogTable
 
 
 class SuperuserIfConfiguredMixin(UserPassesTestMixin):
@@ -26,9 +27,6 @@ class SuperuserIfConfiguredMixin(UserPassesTestMixin):
         if config.get("superuser_only", True):
             return self.request.user.is_superuser
         return True
-
-
-from .tables import InstallationLogTable
 
 
 class CatalogListView(SuperuserIfConfiguredMixin, PermissionRequiredMixin, View):
